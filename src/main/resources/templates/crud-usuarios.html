@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PLAY NOW - Gestión de Usuarios</title>
-  <link rel="stylesheet" href="/css/crud-usuarios.css">
+  <link rel="stylesheet" th:href="@{/css/crud-usuarios.css}">
 </head>
 <body>
 
@@ -14,11 +14,11 @@
   </div>
   <nav class="menu-admin">
     <ul>
-      <li><a href="/gestion.html">Panel Principal</a></li>
-      <li><a href="/crud-productos.html">Productos</a></li>
-      <li><a href="/crud-categorias.html">Categorías</a></li>
-      <li><a href="/crud-usuarios.html" class="activo">Usuarios</a></li>
-      <li><a href="/login.html" class="btn-salir">Salir</a></li>
+      <li><a th:href="@{/gestion}">Panel Principal</a></li>
+      <li><a th:href="@{/admin/productos}">Productos</a></li>
+      <li><a th:href="@{/admin/categorias}">Categorías</a></li>
+      <li><a th:href="@{/admin/usuarios}" class="activo">Usuarios</a></li>
+      <li><a th:href="@{/login}" class="btn-salir">Salir</a></li>
     </ul>
   </nav>
 </header>
@@ -26,40 +26,51 @@
 <main class="contenedor-usuarios">
 
   <div class="cabecera-seccion">
-    <h2>👥 Control de Comunidad</h2>
-    <p>Administra las cuentas de clientes y los niveles de acceso al sistema.</p>
+    <h2>👥 Control de Comunidad y Personal</h2>
+    <p th:text="${nuevoUsuario.id != null ? 'Editando perfil de: ' + nuevoUsuario.nickname : 'Administra las cuentas de clientes, vendedores y administradores.'}"></p>
   </div>
 
   <div class="layout-usuarios">
 
     <aside class="panel-formulario">
       <div class="tarjeta-form">
-        <h3>Crear Nuevo Perfil</h3>
-        <form action="#" method="get">
+        <h3 th:text="${nuevoUsuario.id != null ? 'Editar Perfil' : 'Crear Nuevo Perfil'}">Crear Nuevo Perfil</h3>
+
+        <form th:action="@{/admin/usuarios/guardar}" th:object="${nuevoUsuario}" method="post">
+          <input type="hidden" th:field="*{id}">
+          <input type="hidden" th:field="*{activo}">
+
           <div class="campo">
             <label>Nombre de Usuario / Nickname</label>
-            <input type="text" placeholder="Ej. edu123" required>
+            <input type="text" th:field="*{nickname}" placeholder="Ej. edu123" required>
           </div>
 
           <div class="campo">
             <label>Correo Electrónico</label>
-            <input type="email" placeholder="usuario@correo.com" required>
+            <input type="email" th:field="*{correo}" placeholder="usuario@correo.com" required>
           </div>
 
           <div class="campo">
             <label>Rol del Sistema</label>
-            <select required>
-              <option value="cliente">Cliente Estándar</option>
-              <option value="admin">Administrador</option>
+            <select th:field="*{rol}" required>
+              <option value="">Selecciona un rol...</option>
+              <option value="Cliente">Cliente Estándar</option>
+              <option value="Vendedor">Vendedor / Empleado</option>
+              <option value="Administrador">Administrador Global</option>
             </select>
           </div>
 
           <div class="campo">
-            <label>Contraseña Temporal</label>
-            <input type="password" placeholder="••••••••" required>
+            <label>Contraseña</label>
+            <input type="password" th:field="*{password}" placeholder="••••••••" th:required="${nuevoUsuario.id == null}">
           </div>
 
-          <button type="submit" class="btn-registrar">Guardar Usuario</button>
+          <button type="submit" class="btn-registrar" th:text="${nuevoUsuario.id != null ? 'Actualizar Usuario' : 'Guardar Usuario'}">Guardar Usuario</button>
+
+          <a th:if="${nuevoUsuario.id != null}" th:href="@{/admin/usuarios}"
+             style="display: block; text-align: center; margin-top: 10px; color: #666; text-decoration: none; font-size: 0.9em;">
+            Cancelar Edición
+          </a>
         </form>
       </div>
     </aside>
@@ -73,33 +84,37 @@
             <th>Nickname</th>
             <th>Correo</th>
             <th>Rol</th>
-            <th>Juegos</th>
             <th>Estado</th>
             <th>Acciones</th>
           </tr>
           </thead>
           <tbody>
-          <tr>
-            <td><div class="mini-avatar">A</div></td>
-            <td><strong>Aylin</strong></td>
-            <td>aylin@email.com</td>
-            <td><span class="tag tag-admin">Admin</span></td>
-            <td>12</td>
-            <td><span class="status-dot online"></span> Activo</td>
+          <tr th:each="u : ${usuarios}">
             <td>
-              <button class="btn-icono">✏️</button>
+              <div class="mini-avatar" th:classappend="${u.rol == 'Administrador' ? '' : (u.rol == 'Vendedor' ? 'green' : 'gray')}"
+                   th:text="${#strings.substring(u.nickname,0,1).toUpperCase()}">A</div>
+            </td>
+            <td><strong th:text="${u.nickname}">Aylin</strong></td>
+            <td th:text="${u.correo}">aylin@email.com</td>
+            <td>
+                <span class="tag"
+                      th:classappend="${u.rol == 'Administrador' ? 'tag-admin' : (u.rol == 'Vendedor' ? 'tag-vendedor' : 'tag-user')}"
+                      th:text="${u.rol}">Admin</span>
+            </td>
+            <td>
+              <span class="status-dot" th:classappend="${u.activo ? 'online' : 'offline'}"></span>
+              <span th:text="${u.activo ? 'Activo' : 'Inactivo'}">Activo</span>
+            </td>
+            <td>
+              <a th:href="@{/admin/usuarios/editar/{id}(id=${u.id})}" class="btn-icono">✏️</a>
+              <a th:href="@{/admin/usuarios/eliminar/{id}(id=${u.id})}"
+                 class="btn-icono rojo"
+                 onclick="return confirm('¿Deseas deshabilitar este usuario?')">🗑️</a>
             </td>
           </tr>
-          <tr>
-            <td><div class="mini-avatar green">P</div></td>
-            <td><strong>pepe_G</strong></td>
-            <td>pepe@email.com</td>
-            <td><span class="tag tag-user">Cliente</span></td>
-            <td>3</td>
-            <td><span class="status-dot online"></span> Activo</td>
-            <td>
-              <button class="btn-icono">✏️</button>
-              <button class="btn-icono rojo">🗑️</button>
+          <tr th:if="${#lists.isEmpty(usuarios)}">
+            <td colspan="6" style="text-align: center; padding: 20px; color: #999;">
+              No hay usuarios registrados en el sistema.
             </td>
           </tr>
           </tbody>

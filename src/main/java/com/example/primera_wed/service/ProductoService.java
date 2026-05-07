@@ -71,4 +71,9 @@ public class ProductoService {
     public void eliminarPermanente(Long id) {
         productoRepository.deleteById(id);
     }
+
+    // Dentro de ProductoService.java
+    public List<Producto> buscarPorNombre(String termino) {
+        return productoRepository.findByNombreContainingIgnoreCaseAndActivoTrue(termino);
+    }
 }

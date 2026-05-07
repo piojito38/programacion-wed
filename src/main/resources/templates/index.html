@@ -31,8 +31,12 @@
     </section>
 
     <section class="buscador-seccion">
-        <form action="#" class="formulario-buscador">
-            <input type="search" placeholder="Buscar juegos, categorías o géneros..." class="input-buscador">
+        <form th:action="@{/index}" method="get" class="formulario-buscador">
+            <input type="search"
+                   name="buscar"
+                   th:value="${param.buscar}"
+                   placeholder="Buscar juegos por nombre..."
+                   class="input-buscador">
             <button type="submit" class="btn-buscar">Buscar</button>
         </form>
     </section>
