@@ -21,6 +21,18 @@ public class UsuarioService {
     }
 
     public void guardar(Usuario usuario) {
+        // Si el usuario ya tiene un ID, significa que lo estamos EDITANDO
+        if (usuario.getId() != null) {
+            Usuario usuarioExistente = usuarioRepository.findById(usuario.getId()).orElse(null);
+
+            // Verificamos si dejaron el campo de contraseña en blanco en el formulario
+            if (usuarioExistente != null && (usuario.getPassword() == null || usuario.getPassword().isEmpty())) {
+                // Como está en blanco, le volvemos a poner la contraseña que ya tenía antes
+                usuario.setPassword(usuarioExistente.getPassword());
+            }
+        }
+
+        // Finalmente guardamos los cambios
         usuarioRepository.save(usuario);
     }
 

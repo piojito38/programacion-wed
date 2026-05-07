@@ -2,7 +2,7 @@ package com.example.primera_wed.controller;
 
 import com.example.primera_wed.model.Producto;
 import com.example.primera_wed.service.ProductoService;
-import com.example.primera_wed.service.CategoriaService; // Importante añadir el import
+import com.example.primera_wed.service.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,19 +12,20 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/admin/productos")
 public class ProductoAdminController {
 
-    @Autowired
-    private ProductoService productoService;
+    @Autowired private ProductoService productoService;
+    @Autowired private CategoriaService categoriaService;
 
-    // 1. CORRECCIÓN: Inyectar el servicio de categorías
-    @Autowired
-    private CategoriaService categoriaService;
-
-    // 2. CORRECCIÓN: Un solo método listar que incluya todo
+    // CORRECCIÓN 1: Integrar el buscador moderno
     @GetMapping
-    public String listar(Model model) {
-        model.addAttribute("productos", productoService.obtenerActivos());
+    public String listar(@RequestParam(name = "buscar", required = false) String buscar, Model model) {
+        // Si Mau escribe algo en el buscador, filtramos. Si no, mostramos todos.
+        if (buscar != null && !buscar.trim().isEmpty()) {
+            model.addAttribute("productos", productoService.buscarPorNombre(buscar));
+        } else {
+            model.addAttribute("productos", productoService.obtenerActivos());
+        }
+
         model.addAttribute("nuevoProducto", new Producto());
-        // Añadimos las categorías para que el selector del HTML funcione
         model.addAttribute("categoriasDisponibles", categoriaService.obtenerTodas());
         return "crud-productos";
     }
@@ -35,18 +36,29 @@ public class ProductoAdminController {
         return "redirect:/admin/productos";
     }
 
+    // CORRECCIÓN 2: Blindar la edición contra errores Null
     @GetMapping("/editar/{id}")
     public String editar(@PathVariable Long id, Model model) {
-        model.addAttribute("nuevoProducto", productoService.obtenerPorId(id));
+        Producto p = productoService.obtenerPorId(id);
+
+        // Si el juego no existe en la base de datos, redirigimos al inicio para evitar que la página explote
+        if (p == null) {
+            return "redirect:/admin/productos";
+        }
+
+        model.addAttribute("nuevoProducto", p);
         model.addAttribute("productos", productoService.obtenerActivos());
-        // También necesitamos las categorías aquí por si Mau decide editar la categoría del juego
         model.addAttribute("categoriasDisponibles", categoriaService.obtenerTodas());
         return "crud-productos";
     }
 
-    @GetMapping("/eliminar/{id}")
-    public String eliminar(@PathVariable Long id) {
-        productoService.desactivar(id);
+    @PostMapping("/modificar-stock")
+    public String modStock(@RequestParam("id") Long id, @RequestParam("cantidad") int cantidad) {
+        try {
+            productoService.modificarStock(id, cantidad);
+        } catch (Exception e) {
+            // Si intentan bajar el stock a menos de 0, simplemente recargamos la página sin guardar
+        }
         return "redirect:/admin/productos";
     }
 }

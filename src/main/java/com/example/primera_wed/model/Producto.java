@@ -1,6 +1,7 @@
 package com.example.primera_wed.model;
 
 import jakarta.persistence.*;
+import java.util.List; // Necesario para múltiples categorías
 
 @Entity
 @Table(name = "productos")
@@ -14,18 +15,37 @@ public class Producto {
     private Double precio;
     private String imagenUrl;
 
-    // NUEVO CAMPO:
-    private String categoria;
+    // NUEVOS CAMPOS PARA STOCK FÍSICO Y DESCUENTOS
+    private Integer stock;
+    private Double descuento = 0.0;
+    private boolean activo = true;
+
+    // CAMBIO CLAVE: Relación para tener más de una categoría
+    @ManyToMany
+    @JoinTable(
+            name = "producto_categorias",
+            joinColumns = @JoinColumn(name = "producto_id"),
+            inverseJoinColumns = @JoinColumn(name = "categoria_id")
+    )
+    private List<Categoria> categorias;
 
     public Producto() {
     }
 
-    // Actualizamos el constructor
-    public Producto(String nombre, Double precio, String imagenUrl, String categoria) {
+    // Constructor actualizado para el inventario retro
+    public Producto(String nombre, Double precio, String imagenUrl, Integer stock) {
         this.nombre = nombre;
         this.precio = precio;
         this.imagenUrl = imagenUrl;
-        this.categoria = categoria;
+        this.stock = stock;
+    }
+
+    // Lógica para calcular el precio con el descuento aplicado
+    public Double getPrecioFinal() {
+        if (this.descuento > 0) {
+            return this.precio - (this.precio * (this.descuento / 100));
+        }
+        return this.precio;
     }
 
     // --- Getters y Setters ---
@@ -42,15 +62,15 @@ public class Producto {
     public String getImagenUrl() { return imagenUrl; }
     public void setImagenUrl(String imagenUrl) { this.imagenUrl = imagenUrl; }
 
-    // Nuevos Getters y Setters para Categoría
-    public String getCategoria() { return categoria; }
-    public void setCategoria(String categoria) { this.categoria = categoria; }
-    // Dentro de Producto.java
-    private boolean activo = true; // Por defecto true
+    public Integer getStock() { return stock; }
+    public void setStock(Integer stock) { this.stock = stock; }
 
-// Actualiza tus constructores para incluirlo si lo deseas,
-// o simplemente inicialízalo en la declaración.
+    public Double getDescuento() { return descuento; }
+    public void setDescuento(Double descuento) { this.descuento = descuento; }
 
     public boolean isActivo() { return activo; }
     public void setActivo(boolean activo) { this.activo = activo; }
+
+    public List<Categoria> getCategorias() { return categorias; }
+    public void setCategorias(List<Categoria> categorias) { this.categorias = categorias; }
 }

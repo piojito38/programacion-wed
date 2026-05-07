@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PLAY NOW - Gestión de Inventario</title>
-  <link rel="stylesheet" th:href="@{/css/crud-productos.css}">
+  <link rel="stylesheet" th:href="@{/css/crud-productos.css?v=2}">
 </head>
 <body>
 
@@ -27,60 +27,96 @@
 
 <main class="contenedor-inventario">
 
-  <div class="cabecera-seccion">
-    <h2>📦 Control de Stock </h2>
-    <p th:text="${nuevoProducto.id != null ? 'Editando el juego: ' + nuevoProducto.nombre : 'Añade nuevos títulos o actualiza las existencias de tu almacén.'}"></p>
-  </div>
+  <section class="barra-busqueda-moderna">
+    <form th:action="@{/admin/productos}" method="get">
+      <input type="text" name="buscar" th:value="${param.buscar}" placeholder="🔍 Buscar títulos en el inventario...">
+      <button type="submit">Filtrar</button>
+    </form>
+  </section>
 
   <div class="layout-inventario">
 
     <aside class="panel-formulario">
       <div class="tarjeta-form">
-        <h3 th:text="${nuevoProducto.id != null ? 'Editar Juego' : 'Registrar Nuevo Juego'}">Registrar Nuevo Juego</h3>
+        <h3 th:text="${nuevoProducto?.id != null ? 'Edición Operativa' : 'Registrar Juego Retro'}">Registrar</h3>
 
-        <form th:action="@{/admin/productos/guardar}" th:object="${nuevoProducto}" method="post">
-          <!-- Campo oculto para el ID necesario para la edición -->
+        <form id="formPrincipal" th:action="@{/admin/productos/guardar}" th:object="${nuevoProducto}" method="post"
+              onsubmit="return procesarGuardado()">
+
           <input type="hidden" th:field="*{id}">
-
-          <!-- Mantiene el estado activo durante la edición -->
           <input type="hidden" th:field="*{activo}">
 
-          <div class="campo">
-            <label>Nombre del Título</label>
-            <input type="text" th:field="*{nombre}" placeholder="Ej. Valorant Edition" required>
-          </div>
-
-          <div class="campo">
-            <label>Categoría</label>
-            <!-- Selector dinámico conectado a la base de datos -->
-            <select th:field="*{categoria}" required>
-              <option value="">Selecciona una...</option>
-              <option th:each="cat : ${categoriasDisponibles}"
-                      th:value="${cat.nombre}"
-                      th:text="${cat.nombre}">Nombre Categoría</option>
-            </select>
-          </div>
-
-          <div class="fila-doble">
+          <th:block th:if="${nuevoProducto?.id == null}">
             <div class="campo">
-              <label>Precio ($)</label>
-              <input type="number" step="0.01" th:field="*{precio}" placeholder="0.00" required>
+              <label>Título del Juego Retro</label>
+              <input type="text" th:field="*{nombre}" required>
             </div>
+
             <div class="campo">
-              <label>URL de la Imagen</label>
-              <input type="text" th:field="*{imagenUrl}" placeholder="/img/juego.jpg" required>
+              <label>Categorías (Múltiple)</label>
+              <select th:field="*{categorias}" multiple required class="select-multiple">
+                <option th:each="cat : ${categoriasDisponibles}" th:value="${cat.id}" th:text="${cat.nombre}">Categoría</option>
+              </select>
             </div>
+
+            <div class="fila-doble">
+              <div class="campo">
+                <label>Precio Base ($)</label>
+                <input type="number" step="0.01" th:field="*{precio}" required>
+              </div>
+              <div class="campo">
+                <label>Stock Inicial</label>
+                <input type="number" th:field="*{stock}" required placeholder="0">
+              </div>
+            </div>
+
+            <div class="campo">
+              <label>URL Imagen de Portada</label>
+              <input type="text" th:field="*{imagenUrl}" required>
+            </div>
+          </th:block>
+
+          <th:block th:if="${nuevoProducto?.id != null}">
+            <div class="campo">
+              <label>Juego Seleccionado</label>
+              <p><strong th:text="*{nombre}" style="color: #0074e4; font-size: 16px;"></strong></p>
+              <input type="hidden" th:field="*{nombre}">
+              <input type="hidden" th:field="*{precio}">
+              <input type="hidden" th:field="*{imagenUrl}">
+            </div>
+
+            <div class="campo">
+              <label>Gestión de Stock Físico</label>
+              <div class="caja-stock-interno">
+                <span class="numero-stock" id="stockActualData" th:text="*{stock}">0</span>
+                <span class="etiqueta-stock">Copias en Almacén</span>
+
+                <div class="opciones-transaccion">
+                  <label><input type="radio" name="tipoTransaccion" value="nada" checked onclick="toggleCantidad(false)"> Mantener</label>
+                  <label><input type="radio" name="tipoTransaccion" value="agregar" onclick="toggleCantidad(true)"> Añadir</label>
+                  <label><input type="radio" name="tipoTransaccion" value="quitar" onclick="toggleCantidad(true)"> Retirar</label>
+                </div>
+
+                <div class="selector-manual" id="divCantidadStock" style="display: none; margin-top: 15px;">
+                  <button type="button" class="btn-cantidad" onclick="cambiarValorManual(-1)">-</button>
+                  <input type="number" id="cantidadStockManual" value="1" min="1"
+                         oninput="this.value = this.value.replace(/[^0-9]/g, ''); if(this.value==='0') this.value='';">
+                  <button type="button" class="btn-cantidad" onclick="cambiarValorManual(1)">+</button>
+                </div>
+              </div>
+            </div>
+
+            <input type="hidden" id="stockFinalOculto" th:field="*{stock}">
+          </th:block>
+
+          <div class="campo">
+            <label>Descuento Especial (%)</label>
+            <input type="number" step="0.1" th:field="*{descuento}" placeholder="0.0">
           </div>
 
-          <button type="submit" class="btn-registrar"
-                  th:text="${nuevoProducto.id != null ? 'Actualizar Cambios' : 'Añadir al Inventario'}">
-            Añadir al Inventario
-          </button>
+          <button type="submit" class="btn-registrar">CONFIRMAR</button>
 
-          <a th:if="${nuevoProducto.id != null}" th:href="@{/admin/productos}"
-             style="display: block; text-align: center; margin-top: 10px; color: #666; text-decoration: none; font-size: 0.9em;">
-            Cancelar Edición
-          </a>
+          <a th:if="${nuevoProducto?.id != null}" th:href="@{/admin/productos}" style="display: block; text-align: center; margin-top: 15px; color: #ff4444; font-size: 13px; text-decoration: none;">✖ Cancelar Edición</a>
         </form>
       </div>
     </aside>
@@ -92,40 +128,79 @@
           <tr>
             <th>Imagen</th>
             <th>Título</th>
-            <th>Categoría</th>
-            <th>Precio</th>
+            <th>Categorías</th>
+            <th>Stock</th>
+            <th>Precio Final</th>
             <th>Acciones</th>
           </tr>
           </thead>
           <tbody>
-          <!-- Bucle que muestra solo productos con estado activo -->
           <tr th:each="p : ${productos}">
             <td><img th:src="@{${p.imagenUrl}}" class="mini-portada"></td>
-            <td><strong th:text="${p.nombre}">Título</strong></td>
-            <td th:text="${p.categoria}">Categoría</td>
-            <td th:text="${p.precio == 0 ? 'Gratis' : '$' + p.precio}">$0.00</td>
             <td>
-              <a th:href="@{/admin/productos/editar/{id}(id=${p.id})}"
-                 class="btn-icono" title="Editar precio o datos">✏️</a>
-
-              <a th:href="@{/admin/productos/eliminar/{id}(id=${p.id})}"
-                 class="btn-icono rojo"
-                 onclick="return confirm('¿Deseas ocultar este juego de la tienda?')"
-                 title="Ocultar de la tienda">🗑️</a>
+              <strong th:text="${p.nombre}"></strong>
+              <span th:if="${p.descuento > 0}" class="badge-descuento" th:text="${'-' + p.descuento + '%'}"></span>
             </td>
-          </tr>
-          <tr th:if="${#lists.isEmpty(productos)}">
-            <td colspan="5" style="text-align: center; padding: 20px; color: #999;">
-              No hay productos activos en el catálogo.
+            <td>
+              <span th:each="c : ${p.categorias}" th:text="${c.nombre}" class="tag-cat"></span>
+            </td>
+            <td>
+              <strong th:text="${p.stock}" th:classappend="${p.stock < 5 ? 'bajo-stock' : ''}" style="font-size: 1.3em;">0</strong>
+            </td>
+            <td>
+              <span th:if="${p.descuento > 0}" style="text-decoration: line-through; color: #888; font-size: 0.8em;" th:text="${'$' + p.precio}"></span>
+              <span th:text="${'$' + p.getPrecioFinal()}"></span>
+            </td>
+            <td>
+              <a th:href="@{/admin/productos/editar/{id}(id=${p.id})}" class="btn-icono" title="Editar">✏️</a>
+              <a th:href="@{/admin/productos/eliminar/{id}(id=${p.id})}" class="btn-icono rojo" title="Eliminar" onclick="return confirm('¿Ocultar este juego del inventario?')">🗑️</a>
             </td>
           </tr>
           </tbody>
         </table>
       </div>
     </section>
-
   </div>
 </main>
+
+<script th:inline="javascript">
+  function toggleCantidad(mostrar) {
+    document.getElementById('divCantidadStock').style.display = mostrar ? 'flex' : 'none';
+  }
+
+  function cambiarValorManual(cambio) {
+    let input = document.getElementById('cantidadStockManual');
+    let valor = parseInt(input.value) || 0;
+    valor += cambio;
+    if (valor < 1) valor = 1;
+    input.value = valor;
+  }
+
+  function procesarGuardado() {
+    let radio = document.querySelector('input[name="tipoTransaccion"]:checked');
+
+    // Solo hace matemáticas si estamos en la ventana de edición
+    if (radio) {
+      let stockActual = parseInt(document.getElementById('stockActualData').innerText);
+      let cantidad = parseInt(document.getElementById('cantidadStockManual').value) || 0;
+      let finalStock = stockActual;
+
+      if (radio.value === 'agregar') {
+        finalStock += cantidad;
+      } else if (radio.value === 'quitar') {
+        finalStock -= cantidad;
+        if (finalStock < 0) {
+          alert(`¡Error! No puedes retirar ${cantidad} copias. Solo tienes ${stockActual} en el almacén.`);
+          return false; // Bloquea el envío del formulario
+        }
+      }
+      // Actualizamos el input oculto con el resultado de la suma/resta
+      document.getElementById('stockFinalOculto').value = finalStock;
+    }
+
+    return confirm('¿Confirmar los cambios en la base de datos?');
+  }
+</script>
 
 </body>
 </html>

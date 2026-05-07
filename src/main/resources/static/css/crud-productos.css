@@ -1,3 +1,6 @@
+/* =========================================
+   1. ESTILOS BASE Y CABECERA
+   ========================================= */
 * {
     margin: 0;
     padding: 0;
@@ -28,22 +31,20 @@ body {
 
 .btn-salir { color: #ff4444 !important; }
 
+/* =========================================
+   2. ESTRUCTURA DEL CRUD
+   ========================================= */
 .contenedor-inventario {
     padding: 40px 50px;
 }
 
-.cabecera-seccion {
-    margin-bottom: 30px;
-}
-
-.cabecera-seccion h2 { font-size: 28px; margin-bottom: 5px; }
-.cabecera-seccion p { color: #888; }
-
 .layout-inventario {
-    display: flex;
+    display: grid;
+    grid-template-columns: 350px 1fr;
     gap: 30px;
 }
 
+/* Formulario lateral */
 .panel-formulario {
     width: 350px;
     flex-shrink: 0;
@@ -53,6 +54,7 @@ body {
     background-color: #18181c;
     padding: 25px;
     border-radius: 8px;
+    border: 1px solid #333;
     position: sticky;
     top: 20px;
 }
@@ -86,6 +88,7 @@ body {
     margin-top: 10px;
 }
 
+/* Tabla de productos */
 .panel-tabla { flex: 1; }
 
 .tabla-contenedor {
@@ -100,19 +103,332 @@ table {
 }
 
 th { text-align: left; color: #888; font-size: 12px; text-transform: uppercase; padding: 15px 10px; border-bottom: 1px solid #333; }
-
 td { padding: 15px 10px; border-bottom: 1px solid #252525; font-size: 14px; }
-
-.mini-portada { width: 40px; height: 55px; object-fit: cover; border-radius: 4px; background-color: #333; }
-
-.badge {
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: bold;
-}
-.disponible { background-color: rgba(46, 204, 113, 0.2); color: #2ecc71; }
-.bajo { background-color: rgba(241, 196, 15, 0.2); color: #f1c40f; }
 
 .btn-icono { background: none; border: 1px solid #333; color: white; padding: 5px 8px; border-radius: 4px; cursor: pointer; margin-right: 5px; }
 .btn-icono.rojo { border-color: #ff4444; }
+
+
+/* =========================================
+   3. CATEGORÍAS Y BADGES
+   ========================================= */
+.select-multiple {
+    height: 120px;
+    padding: 5px !important;
+}
+
+.select-multiple option {
+    padding: 8px;
+    border-bottom: 1px solid #222;
+}
+
+.tag-cat {
+    background-color: rgba(0, 116, 228, 0.1);
+    color: #0074e4;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    margin-right: 4px;
+    display: inline-block;
+    border: 1px solid rgba(0, 116, 228, 0.3);
+}
+
+.badge-descuento {
+    background-color: #cc0000;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: bold;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+.bajo-stock {
+    color: #f1c40f;
+    font-weight: bold;
+}
+
+.mini-portada {
+    width: 50px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+/* =========================================
+   4. BUSCADOR MODERNO Y GESTIÓN DE STOCK
+   ========================================= */
+/* =========================================
+   BUSCADOR MODERNO (DISEÑO GAMING)
+   ========================================= */
+.barra-busqueda-moderna {
+    background-color: #18181c;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #333;
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: flex-start; /* Alineado a la izquierda para mejor lectura */
+}
+
+.barra-busqueda-moderna form {
+    display: flex;
+    width: 100%;
+    max-width: 500px; /* Evita que se estire por toda la pantalla */
+    position: relative;
+}
+
+.barra-busqueda-moderna input {
+    width: 100%;
+    background-color: #0b0b0e;
+    border: 1px solid #444;
+    color: white;
+    padding: 12px 20px;
+    padding-right: 110px; /* Deja espacio para que el botón no tape el texto */
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.barra-busqueda-moderna input:focus {
+    border-color: #0074e4;
+    box-shadow: 0 0 10px rgba(0, 116, 228, 0.2);
+}
+
+.barra-busqueda-moderna button {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    bottom: 5px;
+    background-color: #0074e4;
+    border: none;
+    color: white;
+    padding: 0 25px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+    transition: all 0.2s ease;
+}
+
+.barra-busqueda-moderna button:hover {
+    background-color: #005bb5;
+    transform: scale(0.97); /* Pequeño efecto al hacer clic/hover */
+}
+
+/* Diseño interno del panel de Stock Físico */
+.caja-stock-interno {
+    background: #0b0b0e;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    text-align: center;
+}
+.numero-stock {
+    display: block;
+    font-size: 28px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 5px;
+}
+.etiqueta-stock {
+    color: #888;
+    font-size: 11px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+}
+.controles-stock {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+.btn-trans {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+    transition: 0.2s;
+    font-size: 13px;
+    flex: 1;
+}
+/* =========================================
+   5. SELECTOR DE CANTIDAD MANUAL
+   ========================================= */
+.selector-manual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+.btn-cantidad {
+    background-color: #222;
+    color: white;
+    border: 1px solid #444;
+    border-radius: 4px;
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.btn-cantidad:hover {
+    background-color: #0074e4;
+    border-color: #0074e4;
+}
+.selector-manual input {
+    width: 60px;
+    text-align: center;
+    background-color: #0b0b0e;
+    border: 1px solid #444;
+    color: white;
+    padding: 5px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: bold;
+}
+/* Quitar las flechas predeterminadas del navegador */
+.selector-manual input::-webkit-outer-spin-button,
+.selector-manual input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.selector-manual input[type=number] {
+    -moz-appearance: textfield;
+}
+.btn-trans.quitar { background-color: #e74c3c; }
+.btn-trans.quitar:disabled { background-color: #444; color: #777; cursor: not-allowed; }
+.btn-trans.quitar:hover:not(:disabled) { background-color: #c0392b; }
+.btn-trans.agregar { background-color: #2ecc71; }
+.btn-trans.agregar:hover { background-color: #27ae60; }
+
+/* =========================================
+   ESTILOS DE BUSCADOR Y SELECTOR DE STOCK
+   ========================================= */
+
+/* Buscador Moderno */
+.barra-busqueda-moderna {
+    background: #18181c;
+    padding: 15px 25px;
+    border-radius: 12px;
+    border: 1px solid #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+.barra-busqueda-moderna form {
+    display: flex;
+    width: 100%;
+    position: relative;
+}
+.barra-busqueda-moderna input {
+    width: 100%;
+    background: #0b0b0e;
+    border: 1px solid #444;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 30px;
+    font-size: 14px;
+    outline: none;
+    transition: 0.3s;
+}
+.barra-busqueda-moderna input:focus {
+    border-color: #0074e4;
+    box-shadow: 0 0 8px rgba(0, 116, 228, 0.3);
+}
+.barra-busqueda-moderna button {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    bottom: 5px;
+    background: #0074e4;
+    border: none;
+    color: white;
+    padding: 0 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+.barra-busqueda-moderna button:hover { background: #005bb5; }
+
+/* Selector de Stock y Radio Buttons */
+.opciones-transaccion {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+.opciones-transaccion label {
+    background: #222;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    border: 1px solid #444;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: white;
+}
+.opciones-transaccion input[type="radio"] {
+    accent-color: #0074e4; /* Le da el color azul al puntito */
+    transform: scale(1.2);
+}
+
+.selector-manual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+.btn-cantidad {
+    background-color: #222;
+    color: white;
+    border: 1px solid #444;
+    border-radius: 4px;
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.btn-cantidad:hover {
+    background-color: #0074e4;
+    border-color: #0074e4;
+}
+.selector-manual input {
+    width: 60px;
+    text-align: center;
+    background-color: #0b0b0e;
+    border: 1px solid #444;
+    color: white;
+    padding: 5px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: bold;
+}
+.selector-manual input::-webkit-outer-spin-button,
+.selector-manual input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.selector-manual input[type=number] {
+    -moz-appearance: textfield;
+}

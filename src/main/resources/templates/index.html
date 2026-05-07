@@ -44,26 +44,28 @@
     <section class="categoria-juegos" th:each="cat : ${categorias}">
         <h3 th:text="'Juegos de ' + ${cat.nombre}">Nombre de Categoría</h3>
 
-        <div class="cuadricula-juegos">
-            <!-- Filtro compatible con Thymeleaf -->
-            <th:block th:each="producto : ${productos}">
-                <article class="tarjeta-juego" th:if="${producto.categoria == cat.nombre}">
+        <th:block th:with="juegosEnCategoria=${productos.?[categorias != null and !categorias.?[id == __${cat.id}__].isEmpty()]}">
+
+            <div class="cuadricula-juegos" th:if="${not #lists.isEmpty(juegosEnCategoria)}">
+                <article class="tarjeta-juego" th:each="producto : ${juegosEnCategoria}">
                     <img th:src="@{${producto.imagenUrl}}" alt="Portada" class="img-juego">
                     <div class="info-juego">
                         <h4 th:text="${producto.nombre}">Nombre</h4>
                         <p class="estrellas">&#9733;&#9733;&#9733;&#9733;&#9734;</p>
-                        <span class="precio" th:text="${producto.precio == 0 ? 'Gratis' : '$' + producto.precio}">$0.00</span>
+
+                        <span class="precio" th:text="${producto.getPrecioFinal() == 0 ? 'Gratis' : '$' + producto.getPrecioFinal()}">$0.00</span>
+
                         <a th:href="@{/compra}" class="btn-comprar">Obtener</a>
                     </div>
                 </article>
-            </th:block>
-        </div>
+            </div>
 
-        <!-- Mensaje si la categoría está vacía (Versión compatible) -->
-        <div th:if="${#lists.isEmpty(productos.?[categoria == '__${cat.nombre}__'])}"
-             style="color: #666; padding: 10px; font-style: italic;">
-            Próximamente más títulos en esta sección.
-        </div>
+            <div th:if="${#lists.isEmpty(juegosEnCategoria)}"
+                 style="color: #666; padding: 10px; font-style: italic;">
+                Próximamente más títulos en esta sección.
+            </div>
+
+        </th:block>
     </section>
 </main>
 

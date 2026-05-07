@@ -62,7 +62,10 @@
 
           <div class="campo">
             <label>Contraseña</label>
-            <input type="password" th:field="*{password}" placeholder="••••••••" th:required="${nuevoUsuario.id == null}">
+            <input type="password"
+                   th:field="*{password}"
+                   th:placeholder="${nuevoUsuario.id != null ? 'Dejar en blanco para mantener la actual' : '••••••••'}"
+                   th:required="${nuevoUsuario.id == null}">
           </div>
 
           <button type="submit" class="btn-registrar" th:text="${nuevoUsuario.id != null ? 'Actualizar Usuario' : 'Guardar Usuario'}">Guardar Usuario</button>
