@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<!-- 1. Agregado el espacio de nombres de Thymeleaf -->
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Gestión</title>
+    <!-- 2. Ruta de CSS corregida con th:href -->
+    <link rel="stylesheet" th:href="@{/css/gestion.css}">
+</head>
+<body>
+
+<header class="cabecera-admin">
+    <div class="logo">
+        <h1>PLAY NOW <span>| ADMIN</span></h1>
+    </div>
+    <nav class="menu-admin">
+        <ul>
+            <!-- 3. Enlaces del menú corregidos apuntando a las rutas del controlador -->
+            <li><a th:href="@{/}">Ver Tienda</a></li>
+            <li><a th:href="@{/gestion}" class="activo">Panel Principal</a></li>
+            <li><a th:href="@{/login}" class="btn-salir">Cerrar Sesión</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="contenedor-gestion">
+
+    <section class="bienvenida">
+        <h2>Bienvenido al Centro de Control, Mau</h2>
+        <p>Desde aquí puedes supervisar toda la tienda PLAY NOW.</p>
+    </section>
+
+    <div class="cuadricula-accesos">
+
+        <article class="tarjeta-acceso">
+            <div class="icono-acceso">🎮</div>
+            <h3>Inventario</h3>
+            <p>Gestiona tus videojuegos, precios y stock actual.</p>
+            <!-- 4. Enlace al CRUD de productos corregido -->
+            <a th:href="@{/admin/productos}" class="btn-ir">Ir al CRUD</a>
+        </article>
+
+        <article class="tarjeta-acceso">
+            <div class="icono-acceso">📊</div>
+            <h3>Estadísticas</h3>
+            <p>Revisa las ventas del mes y el crecimiento de usuarios.</p>
+            <!-- 5. Enlace a métricas corregido -->
+            <a th:href="@{/metricas}" class="btn-ir">Ver Métricas</a>
+        </article>
+
+        <article class="tarjeta-acceso">
+            <div class="icono-acceso">🛡️</div>
+            <h3>Seguridad</h3>
+            <p>Administra permisos y roles de los empleados.</p>
+            <!-- 6. Enlace a gestión de usuarios corregido -->
+            <a th:href="@{/admin/usuarios}" class="btn-ir">Usuarios</a>
+        </article>
+
+    </div>
+
+    <section class="estado-sistema">
+        <h3>Estado del Sistema</h3>
+        <div class="lista-estado">
+            <div class="item-estado">
+                <span>Base de Datos (H2):</span>
+                <span class="status online">● Conectado</span>
+            </div>
+            <div class="item-estado">
+                <span>Servidor Spring Boot:</span>
+                <span class="status online">● Activo</span>
+            </div>
+            <div class="item-estado">
+                <span>Almacenamiento de Imágenes:</span>
+                <span class="status online">● Local (static)</span>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer class="pie-pagina">
+    <p>PLAY NOW - Gestión Administrativa &copy; 2026</p>
+</footer>
+
+</body>
+</html>

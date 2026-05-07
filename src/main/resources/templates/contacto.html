@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Play Now - Contacto</title>
+    <link rel="stylesheet" href="/css/contacto.css">
+</head>
+<body>
+
+<header class="cabecera-principal">
+    <div class="logo">
+        <a href="/index.html" class="logo-enlace">
+            <h1>PLAY NOW</h1>
+        </a>
+    </div>
+    <nav class="menu-navegacion">
+        <ul>
+            <li><a href="/index.html">Inicio</a></li>
+            <li><a href="/contacto.html" class="activo">Contacto</a></li>
+            <li><a href="/publicidad.html">Publicidad</a></li>
+            <li><a href="/login.html" class="btn-login">Iniciar Sesión</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="contenedor-principal">
+    <section class="tarjeta-contacto">
+
+        <article class="info-soporte">
+            <h2>¿Necesitas ayuda?</h2>
+            <p class="descripcion">Estamos aquí para resolver tus dudas sobre juegos, compras o problemas técnicos.</p>
+
+            <div class="bloque-info">
+                <h4>📍 Ubicación Central</h4>
+                <p>Huancayo, Junín, Perú</p>
+            </div>
+
+            <div class="bloque-info">
+                <h4>✉️ Correo Electrónico</h4>
+                <p>soporte@playnow.com</p>
+            </div>
+
+            <div class="bloque-info">
+                <h4>🕒 Horario de Atención</h4>
+                <p>Lunes a Viernes: 9:00 AM - 8:00 PM</p>
+            </div>
+        </article>
+
+        <article class="formulario-contacto">
+            <form action="#" method="get">
+
+                <div class="fila-inputs">
+                    <div class="grupo-input">
+                        <label for="nombre">Nombre de Usuario</label>
+                        <input type="text" id="nombre" name="nombre" placeholder="Tu nombre o Nickname" required>
+                    </div>
+                    <div class="grupo-input">
+                        <label for="correo">Correo Electrónico</label>
+                        <input type="email" id="correo" name="correo" placeholder="ejemplo@correo.com" required>
+                    </div>
+                </div>
+
+                <div class="grupo-input">
+                    <label for="asunto">Asunto</label>
+                    <select id="asunto" name="asunto" required>
+                        <option value="">Selecciona el motivo de tu consulta...</option>
+                        <option value="compra">Problema con una compra</option>
+                        <option value="tecnico">Soporte técnico de un juego</option>
+                        <option value="cuenta">Problemas con mi cuenta</option>
+                        <option value="otro">Otro motivo</option>
+                    </select>
+                </div>
+
+                <div class="grupo-input">
+                    <label for="mensaje">Mensaje</label>
+                    <textarea id="mensaje" name="mensaje" rows="5" placeholder="Describe tu problema con el mayor detalle posible..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn-enviar">ENVIAR MENSAJE</button>
+            </form>
+        </article>
+
+    </section>
+</main>
+
+<footer class="pie-pagina">
+    <p>&copy; 2026 Play Now. Todos los derechos reservados.</p>
+</footer>
+
+</body>
+</html>

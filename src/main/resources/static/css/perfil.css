@@ -1,0 +1,233 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #121212;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+
+.cabecera-principal {
+    background-color: #18181c;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 50px;
+    border-bottom: 1px solid #2a2a2a;
+}
+.logo-enlace { text-decoration: none; color: #ffffff; }
+.logo h1 { font-size: 24px; letter-spacing: 2px; }
+.menu-navegacion ul { list-style: none; display: flex; gap: 30px; align-items: center; }
+.menu-navegacion a { text-decoration: none; color: #aaaaaa; font-size: 14px; text-transform: uppercase; transition: color 0.3s; }
+.menu-navegacion a:hover, .menu-navegacion a.activo { color: #ffffff; }
+.btn-login { background-color: #2a2a2a; padding: 10px 20px; border-radius: 5px; }
+
+
+.contenedor-perfil {
+    flex: 1;
+    display: flex;
+    padding: 40px 50px;
+    gap: 40px;
+    max-width: 1300px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+
+.panel-usuario {
+    width: 25%;
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    padding: 30px;
+    height: fit-content;
+}
+
+.avatar-usuario {
+    width: 100px;
+    height: 100px;
+    background-color: #0074e4;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 20px auto;
+}
+
+.avatar-usuario span {
+    font-size: 40px;
+    font-weight: bold;
+    color: white;
+}
+
+.panel-usuario h2 {
+    text-align: center;
+    font-size: 22px;
+    margin-bottom: 5px;
+}
+
+.correo {
+    text-align: center;
+    color: #aaaaaa;
+    font-size: 13px;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #333;
+}
+
+.menu-perfil {
+    list-style: none;
+}
+
+.menu-perfil li {
+    margin-bottom: 10px;
+}
+
+.menu-perfil a {
+    display: block;
+    padding: 12px 15px;
+    color: #aaaaaa;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: 0.3s;
+}
+
+.menu-perfil a:hover {
+    background-color: #2a2a2a;
+    color: #ffffff;
+}
+
+.opcion-activa {
+    background-color: #2a2a2a;
+    color: #0074e4 !important;
+    border-left: 4px solid #0074e4;
+    font-weight: bold;
+}
+
+
+.biblioteca-juegos {
+    width: 75%;
+}
+
+.cabecera-biblioteca {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 15px;
+}
+
+.cabecera-biblioteca h3 {
+    font-size: 28px;
+}
+
+.contador-juegos {
+    color: #aaaaaa;
+    font-size: 14px;
+}
+
+
+.cuadricula-biblioteca {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 30px;
+}
+
+.tarjeta-biblioteca {
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+    transition: transform 0.2s;
+}
+
+.tarjeta-biblioteca:hover {
+    transform: translateY(-5px);
+}
+
+.img-juego-comprado {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    background-color: #333;
+}
+
+.info-comprado {
+    padding: 20px;
+}
+
+.info-comprado h4 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.tiempo-jugado {
+    font-size: 12px;
+    color: #aaaaaa;
+    margin-bottom: 20px;
+}
+
+.btn-jugar {
+    width: 100%;
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-jugar:hover { background-color: #27ae60; }
+
+.btn-descargar {
+    width: 100%;
+    background-color: #2a2a2a;
+    color: white;
+    border: 1px solid #555;
+    padding: 12px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-descargar:hover { background-color: #444; border-color: #777; }
+
+.pie-pagina {
+    text-align: center;
+    padding: 30px;
+    background-color: #18181c;
+    color: #aaaaaa;
+    font-size: 12px;
+    margin-top: auto;
+}
+
+.separador-admin {
+    margin-top: 30px;
+    border-top: 1px solid #333;
+    padding-top: 20px;
+}
+
+.btn-admin-acceso {
+    background-color: #0074e4 !important;
+    color: white !important;
+    font-weight: bold;
+    text-align: center;
+    border: none !important;
+    transition: background-color 0.3s ease;
+}
+
+.btn-admin-acceso:hover {
+    background-color: #005bb5 !important;
+    transform: translateY(-2px);
+}

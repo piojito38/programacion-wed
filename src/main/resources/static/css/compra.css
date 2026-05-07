@@ -1,0 +1,214 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #121212;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.cabecera-compra {
+    padding: 20px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #18181c;
+    border-bottom: 1px solid #2a2a2a;
+}
+
+.btn-volver {
+    text-decoration: none;
+    color: #aaaaaa;
+    font-size: 14px;
+    background-color: #1e1e1e;
+    padding: 8px 15px;
+    border-radius: 4px;
+    border: 1px solid #333;
+    transition: 0.3s;
+}
+
+.btn-volver:hover {
+    color: #ffffff;
+    background-color: #2a2a2a;
+}
+
+.logo-enlace { text-decoration: none; color: #ffffff; text-align: center; }
+.logo-enlace h1 { font-size: 24px; letter-spacing: 2px; }
+.espaciador { width: 140px; }
+
+.contenedor-principal {
+    flex: 1;
+    padding: 40px 50px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.layout-compra {
+    display: flex;
+    gap: 40px;
+}
+
+.detalle-juego {
+    width: 65%;
+}
+
+.img-portada {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+    background-color: #333;
+    margin-bottom: 25px;
+}
+
+.info-texto h2 {
+    font-size: 36px;
+    margin-bottom: 5px;
+}
+
+.etiqueta-genero {
+    display: inline-block;
+    background-color: #2a2a2a;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    color: #aaaaaa;
+    margin-bottom: 25px;
+}
+
+.info-texto h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #0074e4;
+}
+
+.descripcion {
+    color: #cccccc;
+    line-height: 1.6;
+    font-size: 15px;
+    margin-bottom: 30px;
+}
+
+.requisitos {
+    background-color: #1e1e1e;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #333;
+}
+
+.requisitos h4 {
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #aaaaaa;
+}
+
+.requisitos ul {
+    list-style: none;
+}
+
+.requisitos li {
+    font-size: 13px;
+    color: #cccccc;
+    margin-bottom: 5px;
+}
+
+.requisitos strong {
+    color: #ffffff;
+}
+
+.panel-pago {
+    width: 35%;
+    background-color: #1e1e1e;
+    padding: 30px;
+    border-radius: 8px;
+    height: fit-content;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+.panel-pago h3 {
+    font-size: 20px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
+}
+
+.fila-precio {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    font-size: 15px;
+    color: #cccccc;
+}
+
+.total {
+    border-top: 1px solid #333;
+    padding-top: 15px;
+    font-weight: bold;
+    font-size: 18px;
+    color: #ffffff;
+}
+
+.metodos-pago {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.metodos-pago p {
+    font-size: 12px;
+    color: #aaaaaa;
+    margin-bottom: 10px;
+}
+
+.iconos-pago {
+    display: flex;
+    gap: 10px;
+}
+
+.icono {
+    background-color: #121212;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    border: 1px solid #333;
+}
+
+.btn-confirmar {
+    width: 100%;
+    background-color: #0074e4;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-confirmar:hover {
+    background-color: #005bb5;
+}
+
+.terminos {
+    font-size: 11px;
+    color: #777777;
+    text-align: center;
+    margin-top: 15px;
+    line-height: 1.4;
+}
+
+.pie-pagina {
+    text-align: center;
+    padding: 30px;
+    background-color: #18181c;
+    color: #aaaaaa;
+    font-size: 12px;
+    margin-top: auto;
+}

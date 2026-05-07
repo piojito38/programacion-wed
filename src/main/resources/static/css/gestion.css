@@ -1,0 +1,148 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #0b0b0e;
+    color: #ffffff;
+}
+
+.cabecera-admin {
+    background-color: #121212;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 50px;
+    border-bottom: 2px solid #0074e4;
+}
+
+.logo h1 { font-size: 18px; letter-spacing: 1px; }
+.logo span { color: #0074e4; font-weight: normal; }
+
+.menu-admin ul { list-style: none; display: flex; gap: 20px; }
+.menu-admin a {
+    text-decoration: none;
+    color: #888;
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: color 0.3s;
+}
+.menu-admin a:hover, .menu-admin a.activo { color: white; }
+
+.btn-salir { color: #ff4444 !important; }
+
+.contenedor-gestion {
+    padding: 40px 50px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.bienvenida {
+    margin-bottom: 40px;
+    border-bottom: 1px solid #18181c;
+    padding-bottom: 20px;
+}
+
+.bienvenida h2 { font-size: 28px; margin-bottom: 5px; }
+.bienvenida p { color: #888; font-size: 14px; }
+
+.cuadricula-accesos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-bottom: 50px;
+}
+
+.tarjeta-acceso {
+    background-color: #18181c;
+    padding: 35px 25px;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid #2a2a2a;
+    transition: transform 0.3s ease, border-color 0.3s;
+}
+
+.tarjeta-acceso:hover {
+    transform: translateY(-5px);
+    border-color: #0074e4;
+    background-color: #1c1c21;
+}
+
+.icono-acceso {
+    font-size: 45px;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.tarjeta-acceso h3 {
+    margin-bottom: 12px;
+    font-size: 20px;
+    color: #ffffff;
+}
+
+.tarjeta-acceso p {
+    color: #888;
+    font-size: 13px;
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+.btn-ir {
+    display: inline-block;
+    text-decoration: none;
+    background-color: #0074e4;
+    color: white;
+    padding: 10px 25px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 13px;
+    text-transform: uppercase;
+    transition: background-color 0.3s;
+}
+
+.btn-ir:hover { background-color: #005bb5; }
+
+.estado-sistema {
+    background-color: #18181c;
+    padding: 25px;
+    border-radius: 8px;
+    border: 1px solid #2a2a2a;
+}
+
+.estado-sistema h3 {
+    margin-bottom: 20px;
+    color: #0074e4;
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 1px;
+}
+
+.lista-estado {
+    display: flex;
+    flex-direction: column;
+}
+
+.item-estado {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 10px;
+    border-bottom: 1px solid #252525;
+    font-size: 14px;
+}
+
+.item-estado:last-child { border-bottom: none; }
+
+.status { font-weight: bold; font-size: 12px; }
+.online { color: #2ecc71; }
+.warning { color: #f1c40f; }
+
+.pie-pagina {
+    text-align: center;
+    padding: 40px;
+    color: #444;
+    font-size: 12px;
+}

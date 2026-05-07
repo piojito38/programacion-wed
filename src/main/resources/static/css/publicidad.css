@@ -1,0 +1,142 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    background-color: #050505;
+    color: white;
+}
+
+.cabecera-simple {
+    padding: 20px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #121212;
+}
+
+.btn-volver {
+    color: #aaaaaa;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.hero-publicidad {
+    height: 80vh;
+    background: url('/img/promo-bg.jpg') center center / cover no-repeat;
+    background-color: #1a1a1a;
+    position: relative;
+}
+
+.capa-oscura {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(0,0,0,0.9), rgba(0,0,0,0.2));
+    display: flex;
+    align-items: center;
+    padding: 0 100px;
+}
+
+.contenido-promo {
+    max-width: 600px;
+}
+
+.etiqueta-nuevo {
+    background-color: #0074e4;
+    padding: 5px 15px;
+    font-weight: bold;
+    font-size: 12px;
+    border-radius: 4px;
+}
+
+.contenido-promo h2 {
+    font-size: 60px;
+    margin: 20px 0;
+    line-height: 1;
+}
+
+.subtitulo {
+    font-size: 18px;
+    color: #cccccc;
+    margin-bottom: 30px;
+}
+
+.oferta-box {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.descuento {
+    background-color: #cc0000;
+    padding: 10px;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.precios {
+    display: flex;
+    flex-direction: column;
+}
+
+.precio-viejo {
+    text-decoration: line-through;
+    color: #777;
+}
+
+.precio-nuevo {
+    font-size: 30px;
+    font-weight: bold;
+    color: #2ecc71;
+}
+
+.btn-comprar-promo {
+    display: inline-block;
+    padding: 20px 50px;
+    background-color: #ffffff;
+    color: #000000;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 18px;
+    border-radius: 4px;
+    transition: transform 0.2s;
+}
+
+.btn-comprar-promo:hover {
+    transform: scale(1.05);
+}
+
+.tiempo-limite {
+    margin-top: 15px;
+    font-size: 13px;
+    color: #f1c40f;
+}
+
+.detalles-rapidos {
+    display: flex;
+    justify-content: space-around;
+    padding: 50px;
+    background-color: #121212;
+    text-align: center;
+}
+
+.item-detalle h4 {
+    color: #0074e4;
+    margin-bottom: 5px;
+}
+
+.item-detalle p {
+    font-size: 14px;
+    color: #777;
+}
+
+.pie-pagina {
+    text-align: center;
+    padding: 30px;
+    color: #444;
+    font-size: 12px;
+}

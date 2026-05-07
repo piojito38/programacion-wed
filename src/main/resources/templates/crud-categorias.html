@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLAY NOW - Gestión de Categorías</title>
+    <link rel="stylesheet" th:href="@{/css/crud-categorias.css}">
+</head>
+<body>
+
+<header class="cabecera-admin">
+    <div class="logo">
+        <h1>PLAY NOW <span>| CATEGORÍAS</span></h1>
+    </div>
+    <nav class="menu-admin">
+        <ul>
+            <li><a th:href="@{/gestion}">Panel Principal</a></li>
+            <li><a th:href="@{/admin/productos}">Productos</a></li>
+            <li><a th:href="@{/admin/categorias}" class="activo">Categorías</a></li>
+            <li><a th:href="@{/admin/usuarios}">Usuarios</a></li>
+            <li><a th:href="@{/login}" class="btn-salir">Salir</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="contenedor-categorias">
+
+    <div class="cabecera-seccion">
+        <h2>📁 Clasificación de Catálogo</h2>
+        <p th:text="${nuevaCategoria.id != null ? 'Editando categoría: ' + nuevaCategoria.nombre : 'Define las secciones de la tienda para organizar los videojuegos físicos.'}"></p>
+    </div>
+
+    <div class="layout-categorias">
+
+        <!-- ... (cabecera igual) ... -->
+
+        <aside class="panel-formulario">
+            <div class="tarjeta-form">
+                <h3 th:text="${nuevaCategoria.id != null ? 'Editar Categoría' : 'Nueva Categoría'}">Nueva Categoría</h3>
+
+                <form th:action="@{/admin/categorias/guardar}" th:object="${nuevaCategoria}" method="post">
+                    <input type="hidden" th:field="*{id}">
+
+                    <div class="campo">
+                        <label>Nombre de Categoría</label>
+                        <input type="text" th:field="*{nombre}" placeholder="Ej. Acción, RPG, Deportes" required>
+                    </div>
+
+                    <div class="campo">
+                        <label>Descripción Breve</label>
+                        <!-- CAMBIO: th:field en textarea para que cargue el texto al editar -->
+                        <textarea th:field="*{descripcion}" placeholder="¿De qué trata esta sección?" rows="4" required></textarea>
+                    </div>
+
+                    <div class="campo">
+                        <label>Prioridad en Menú</label>
+                        <input type="number" th:field="*{prioridad}" placeholder="Ej. 1" min="1">
+                    </div>
+
+                    <button type="submit" class="btn-registrar"
+                            th:text="${nuevaCategoria.id != null ? 'Actualizar' : 'Crear Categoría'}">Crear Categoría</button>
+
+                    <a th:if="${nuevaCategoria.id != null}" th:href="@{/admin/categorias}"
+                       style="display:block; text-align:center; margin-top:10px; color: #666;">Cancelar Edición</a>
+                </form>
+            </div>
+        </aside>
+
+        <section class="panel-tabla">
+            <div class="tabla-contenedor">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Categoría</th>
+                        <th>Descripción</th>
+                        <th>Prioridad</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="cat : ${categorias}">
+                        <!-- CAMBIO: th:text para mostrar los datos reales de la BD -->
+                        <td th:text="${'CAT-' + cat.id}">ID</td>
+                        <td><strong th:text="${cat.nombre}">Nombre</strong></td>
+                        <td th:text="${cat.descripcion}">Descripción</td>
+                        <td th:text="${cat.prioridad}">1</td>
+                        <td>
+                            <a th:href="@{/admin/categorias/editar/{id}(id=${cat.id})}" class="btn-icono">✏️</a>
+                            <a th:href="@{/admin/categorias/eliminar/{id}(id=${cat.id})}"
+                               class="btn-icono rojo"
+                               onclick="return confirm('¿Eliminar esta categoría?')">🗑️</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</main>
+
+</body>
+</html>

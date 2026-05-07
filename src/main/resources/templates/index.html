@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Play Now - Inicio</title>
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+</head>
+<body>
+
+<header class="cabecera-principal">
+    <div class="logo">
+        <h1>PLAY NOW</h1>
+    </div>
+    <nav class="menu-navegacion">
+        <ul>
+            <li><a th:href="@{/}" class="activo">Inicio</a></li>
+            <li><a th:href="@{/contacto}">Contacto</a></li>
+            <li><a th:href="@{/publicidad}">Publicidad</a></li>
+            <li><a th:href="@{/perfil}" class="btn-login">Mi Biblioteca</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <section class="banner-publicidad">
+        <div class="contenido-banner">
+            <h2>Descubre Nuevos Mundos</h2>
+            <p>Las mejores ofertas en juegos de PC.</p>
+        </div>
+    </section>
+
+    <section class="buscador-seccion">
+        <form action="#" class="formulario-buscador">
+            <input type="search" placeholder="Buscar juegos, categorías o géneros..." class="input-buscador">
+            <button type="submit" class="btn-buscar">Buscar</button>
+        </form>
+    </section>
+
+    <section class="categoria-juegos" th:each="cat : ${categorias}">
+        <h3 th:text="'Juegos de ' + ${cat.nombre}">Nombre de Categoría</h3>
+
+        <div class="cuadricula-juegos">
+            <!-- Filtro compatible con Thymeleaf -->
+            <th:block th:each="producto : ${productos}">
+                <article class="tarjeta-juego" th:if="${producto.categoria == cat.nombre}">
+                    <img th:src="@{${producto.imagenUrl}}" alt="Portada" class="img-juego">
+                    <div class="info-juego">
+                        <h4 th:text="${producto.nombre}">Nombre</h4>
+                        <p class="estrellas">&#9733;&#9733;&#9733;&#9733;&#9734;</p>
+                        <span class="precio" th:text="${producto.precio == 0 ? 'Gratis' : '$' + producto.precio}">$0.00</span>
+                        <a th:href="@{/compra}" class="btn-comprar">Obtener</a>
+                    </div>
+                </article>
+            </th:block>
+        </div>
+
+        <!-- Mensaje si la categoría está vacía (Versión compatible) -->
+        <div th:if="${#lists.isEmpty(productos.?[categoria == '__${cat.nombre}__'])}"
+             style="color: #666; padding: 10px; font-style: italic;">
+            Próximamente más títulos en esta sección.
+        </div>
+    </section>
+</main>
+
+<footer class="pie-pagina">
+    <p>&copy; 2026 PLAY NOW. Todos los derechos reservados.</p>
+</footer>
+
+</body>
+</html>

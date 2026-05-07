@@ -1,0 +1,211 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+.cabecera-principal {
+    background-color: #18181c;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 50px;
+    border-bottom: 1px solid #2a2a2a;
+}
+
+.logo h1 {
+    font-size: 24px;
+    letter-spacing: 2px;
+}
+
+.menu-navegacion ul {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.menu-navegacion a {
+    text-decoration: none;
+    color: #aaaaaa;
+    font-size: 14px;
+    text-transform: uppercase;
+    transition: color 0.3s;
+}
+
+.menu-navegacion a:hover, .menu-navegacion a.activo {
+    color: #ffffff;
+}
+
+.btn-login {
+    background-color: #2a2a2a;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.btn-login:hover {
+    background-color: #3a3a3a;
+}
+
+.banner-publicidad {
+    background-image: url('/img/banner.webp');
+    background-size: cover;
+    background-position: center;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 20px 50px;
+    border-radius: 10px;
+}
+
+.banner-publicidad h2 {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+.contenido-banner {
+    background-color: rgba(0, 0, 0, 0.55);
+    padding: 20px 40px;
+    border-radius: 8px;
+}
+.categoria-juegos {
+    padding: 20px 50px 50px 50px;
+}
+
+.categoria-juegos h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    border-left: 4px solid #0074e4;
+    padding-left: 10px;
+}
+
+.cuadricula-juegos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 25px;
+}
+
+.tarjeta-juego {
+    background-color: #202020;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+
+.tarjeta-juego:hover {
+    transform: scale(1.03);
+    background-color: #2a2a2a;
+}
+
+.img-juego {
+    width: 100%;
+    height: 280px;
+    background-color: #333;
+    object-fit: cover;
+}
+
+.info-juego {
+    padding: 15px;
+}
+
+.info-juego h4 {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.estrellas {
+    color: #ffd700;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.votos {
+    color: #aaaaaa;
+    font-size: 12px;
+}
+
+.precio {
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.btn-comprar {
+    width: 100%;
+    background-color: #0074e4;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.btn-comprar:hover {
+    background-color: #005bb5;
+}
+
+.pie-pagina {
+    text-align: center;
+    padding: 30px;
+    background-color: #18181c;
+    color: #aaaaaa;
+    font-size: 12px;
+    margin-top: 50px;
+}
+
+.buscador-seccion {
+    text-align: center;
+    margin: 30px 20px;
+}
+
+.formulario-buscador {
+    display: inline-block;
+    width: 100%;
+    max-width: 650px;
+}
+
+.input-buscador {
+    width: 70%;
+    padding: 12px 15px;
+    font-size: 15px;
+    background-color: #1e1e1e;
+    color: #ffffff;
+    border: 2px solid #333333;
+    border-radius: 4px;
+    outline: none;
+}
+
+.input-buscador:focus {
+    border-color: #0074e4;
+}
+
+.btn-buscar {
+    width: 20%;
+    padding: 12px 15px;
+    font-size: 15px;
+    font-weight: bold;
+    background-color: #0074e4;
+    color: #ffffff;
+    border: 2px solid #0074e4;
+    border-radius: 4px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.btn-buscar:hover {
+    background-color: #005bb5;
+    border-color: #005bb5;
+}

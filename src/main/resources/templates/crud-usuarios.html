@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PLAY NOW - Gestión de Usuarios</title>
+  <link rel="stylesheet" href="/css/crud-usuarios.css">
+</head>
+<body>
+
+<header class="cabecera-admin">
+  <div class="logo">
+    <h1>PLAY NOW <span>| USUARIOS</span></h1>
+  </div>
+  <nav class="menu-admin">
+    <ul>
+      <li><a href="/gestion.html">Panel Principal</a></li>
+      <li><a href="/crud-productos.html">Productos</a></li>
+      <li><a href="/crud-categorias.html">Categorías</a></li>
+      <li><a href="/crud-usuarios.html" class="activo">Usuarios</a></li>
+      <li><a href="/login.html" class="btn-salir">Salir</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main class="contenedor-usuarios">
+
+  <div class="cabecera-seccion">
+    <h2>👥 Control de Comunidad</h2>
+    <p>Administra las cuentas de clientes y los niveles de acceso al sistema.</p>
+  </div>
+
+  <div class="layout-usuarios">
+
+    <aside class="panel-formulario">
+      <div class="tarjeta-form">
+        <h3>Crear Nuevo Perfil</h3>
+        <form action="#" method="get">
+          <div class="campo">
+            <label>Nombre de Usuario / Nickname</label>
+            <input type="text" placeholder="Ej. edu123" required>
+          </div>
+
+          <div class="campo">
+            <label>Correo Electrónico</label>
+            <input type="email" placeholder="usuario@correo.com" required>
+          </div>
+
+          <div class="campo">
+            <label>Rol del Sistema</label>
+            <select required>
+              <option value="cliente">Cliente Estándar</option>
+              <option value="admin">Administrador</option>
+            </select>
+          </div>
+
+          <div class="campo">
+            <label>Contraseña Temporal</label>
+            <input type="password" placeholder="••••••••" required>
+          </div>
+
+          <button type="submit" class="btn-registrar">Guardar Usuario</button>
+        </form>
+      </div>
+    </aside>
+
+    <section class="panel-tabla">
+      <div class="tabla-contenedor">
+        <table>
+          <thead>
+          <tr>
+            <th>Avatar</th>
+            <th>Nickname</th>
+            <th>Correo</th>
+            <th>Rol</th>
+            <th>Juegos</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td><div class="mini-avatar">A</div></td>
+            <td><strong>Aylin</strong></td>
+            <td>aylin@email.com</td>
+            <td><span class="tag tag-admin">Admin</span></td>
+            <td>12</td>
+            <td><span class="status-dot online"></span> Activo</td>
+            <td>
+              <button class="btn-icono">✏️</button>
+            </td>
+          </tr>
+          <tr>
+            <td><div class="mini-avatar green">P</div></td>
+            <td><strong>pepe_G</strong></td>
+            <td>pepe@email.com</td>
+            <td><span class="tag tag-user">Cliente</span></td>
+            <td>3</td>
+            <td><span class="status-dot online"></span> Activo</td>
+            <td>
+              <button class="btn-icono">✏️</button>
+              <button class="btn-icono rojo">🗑️</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+</body>
+</html>

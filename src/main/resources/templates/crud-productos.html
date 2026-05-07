@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PLAY NOW - Gestión de Inventario</title>
+  <link rel="stylesheet" th:href="@{/css/crud-productos.css}">
+</head>
+<body>
+
+<header class="cabecera-admin">
+  <div class="logo">
+    <a th:href="@{/}" style="text-decoration: none; color: inherit;">
+      <h1>PLAY NOW <span>| INVENTARIO</span></h1>
+    </a>
+  </div>
+  <nav class="menu-admin">
+    <ul>
+      <li><a th:href="@{/gestion}">Panel Principal</a></li>
+      <li><a th:href="@{/admin/productos}" class="activo">Productos</a></li>
+      <li><a th:href="@{/admin/categorias}">Categorías</a></li>
+      <li><a th:href="@{/admin/usuarios}">Usuarios</a></li>
+      <li><a th:href="@{/login}" class="btn-salir">Salir</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main class="contenedor-inventario">
+
+  <div class="cabecera-seccion">
+    <h2>📦 Control de Stock </h2>
+    <p th:text="${nuevoProducto.id != null ? 'Editando el juego: ' + nuevoProducto.nombre : 'Añade nuevos títulos o actualiza las existencias de tu almacén.'}"></p>
+  </div>
+
+  <div class="layout-inventario">
+
+    <aside class="panel-formulario">
+      <div class="tarjeta-form">
+        <h3 th:text="${nuevoProducto.id != null ? 'Editar Juego' : 'Registrar Nuevo Juego'}">Registrar Nuevo Juego</h3>
+
+        <form th:action="@{/admin/productos/guardar}" th:object="${nuevoProducto}" method="post">
+          <!-- Campo oculto para el ID necesario para la edición -->
+          <input type="hidden" th:field="*{id}">
+
+          <!-- Mantiene el estado activo durante la edición -->
+          <input type="hidden" th:field="*{activo}">
+
+          <div class="campo">
+            <label>Nombre del Título</label>
+            <input type="text" th:field="*{nombre}" placeholder="Ej. Valorant Edition" required>
+          </div>
+
+          <div class="campo">
+            <label>Categoría</label>
+            <!-- Selector dinámico conectado a la base de datos -->
+            <select th:field="*{categoria}" required>
+              <option value="">Selecciona una...</option>
+              <option th:each="cat : ${categoriasDisponibles}"
+                      th:value="${cat.nombre}"
+                      th:text="${cat.nombre}">Nombre Categoría</option>
+            </select>
+          </div>
+
+          <div class="fila-doble">
+            <div class="campo">
+              <label>Precio ($)</label>
+              <input type="number" step="0.01" th:field="*{precio}" placeholder="0.00" required>
+            </div>
+            <div class="campo">
+              <label>URL de la Imagen</label>
+              <input type="text" th:field="*{imagenUrl}" placeholder="/img/juego.jpg" required>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-registrar"
+                  th:text="${nuevoProducto.id != null ? 'Actualizar Cambios' : 'Añadir al Inventario'}">
+            Añadir al Inventario
+          </button>
+
+          <a th:if="${nuevoProducto.id != null}" th:href="@{/admin/productos}"
+             style="display: block; text-align: center; margin-top: 10px; color: #666; text-decoration: none; font-size: 0.9em;">
+            Cancelar Edición
+          </a>
+        </form>
+      </div>
+    </aside>
+
+    <section class="panel-tabla">
+      <div class="tabla-contenedor">
+        <table>
+          <thead>
+          <tr>
+            <th>Imagen</th>
+            <th>Título</th>
+            <th>Categoría</th>
+            <th>Precio</th>
+            <th>Acciones</th>
+          </tr>
+          </thead>
+          <tbody>
+          <!-- Bucle que muestra solo productos con estado activo -->
+          <tr th:each="p : ${productos}">
+            <td><img th:src="@{${p.imagenUrl}}" class="mini-portada"></td>
+            <td><strong th:text="${p.nombre}">Título</strong></td>
+            <td th:text="${p.categoria}">Categoría</td>
+            <td th:text="${p.precio == 0 ? 'Gratis' : '$' + p.precio}">$0.00</td>
+            <td>
+              <a th:href="@{/admin/productos/editar/{id}(id=${p.id})}"
+                 class="btn-icono" title="Editar precio o datos">✏️</a>
+
+              <a th:href="@{/admin/productos/eliminar/{id}(id=${p.id})}"
+                 class="btn-icono rojo"
+                 onclick="return confirm('¿Deseas ocultar este juego de la tienda?')"
+                 title="Ocultar de la tienda">🗑️</a>
+            </td>
+          </tr>
+          <tr th:if="${#lists.isEmpty(productos)}">
+            <td colspan="5" style="text-align: center; padding: 20px; color: #999;">
+              No hay productos activos en el catálogo.
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+</body>
+</html>
