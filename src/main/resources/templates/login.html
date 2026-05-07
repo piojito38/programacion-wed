@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PLAY NOW - Iniciar Sesión</title>
-    <link rel="stylesheet" href="/css/login.css">
+    <link rel="stylesheet" th:href="@{/css/login.css}">
 </head>
 <body>
 
 <header class="cabecera-login">
-    <a href="/index.html" class="btn-volver">&#8592; Volver a la tienda</a>
+    <a th:href="@{/}" class="btn-volver">&#8592; Volver a la tienda</a>
 
-    <a href="/index.html" class="logo-enlace">+
+    <a th:href="@{/}" class="logo-enlace">
         <h1>PLAY NOW</h1>
     </a>
 
@@ -23,11 +23,18 @@
         <h2>Iniciar Sesión</h2>
         <p class="subtitulo">Accede a tu panel de gestión</p>
 
-        <form action="/crud.html" method="get">
+        <div th:if="${param.error}" style="color: #ff4d4d; margin-bottom: 15px; font-size: 14px; text-align: center;">
+            ⚠️ Nickname o contraseña incorrectos.
+        </div>
+        <div th:if="${param.logout}" style="color: #2ecc71; margin-bottom: 15px; font-size: 14px; text-align: center;">
+            ✅ Sesión cerrada con éxito.
+        </div>
+
+        <form th:action="@{/login}" method="post">
 
             <div class="grupo-input">
-                <label for="correo">Correo Electrónico</label>
-                <input type="email" id="correo" name="correo" placeholder="ejemplo@correo.com" required>
+                <label for="username">Nombre de Usuario (Nickname)</label>
+                <input type="text" id="username" name="username" placeholder="Tu nickname aquí" required autofocus>
             </div>
 
             <div class="grupo-input">
@@ -37,7 +44,7 @@
 
             <div class="opciones-extra">
                 <label>
-                    <input type="checkbox" name="recordar"> Recordar mi cuenta
+                    <input type="checkbox" name="remember-me"> Recordar mi cuenta
                 </label>
                 <a href="#" class="enlace-olvido">¿Olvidaste tu contraseña?</a>
             </div>

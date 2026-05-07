@@ -169,3 +169,31 @@ body {
     color: #ffffff;
     text-decoration: underline;
 }
+
+/* Estilos para las alertas de error o logout */
+.alerta {
+    padding: 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Color rojo para cuando falla la contraseña */
+.alerta-error {
+    background-color: rgba(231, 76, 60, 0.1);
+    color: #e74c3c;
+    border: 1px solid rgba(231, 76, 60, 0.3);
+}
+
+/* Color verde para cuando sale de la sesión */
+.alerta-exito {
+    background-color: rgba(46, 204, 113, 0.1);
+    color: #2ecc71;
+    border: 1px solid rgba(46, 204, 113, 0.3);
+}
+
+/* Mejorar el checkbox de "Recordar" */
+.opciones-extra input[type="checkbox"] {
+    accent-color: #0074e4; /* Lo vuelve azul para que combine */
+}

@@ -2,8 +2,8 @@ package com.example.primera_wed.service;
 
 import com.example.primera_wed.model.Usuario;
 import com.example.primera_wed.repository.UsuarioRepository;
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,6 +14,19 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    // MÉTODO NUEVO: Vital para el Login
+    public Usuario buscarPorNickname(String nickname) {
+        return usuarioRepository.findByNickname(nickname).orElse(null);
+    }
+
+    // MÉTODO NUEVO: Vital para el DataInit
+    public Usuario buscarPorCorreo(String correo) {
+        return usuarioRepository.findByCorreo(correo).orElse(null);
+    }
+
     public List<Usuario> obtenerActivos() {
         return usuarioRepository.findAll().stream()
                 .filter(Usuario::isActivo)
@@ -21,18 +34,22 @@ public class UsuarioService {
     }
 
     public void guardar(Usuario usuario) {
-        // Si el usuario ya tiene un ID, significa que lo estamos EDITANDO
         if (usuario.getId() != null) {
+            // MODO EDICIÓN
             Usuario usuarioExistente = usuarioRepository.findById(usuario.getId()).orElse(null);
-
-            // Verificamos si dejaron el campo de contraseña en blanco en el formulario
-            if (usuarioExistente != null && (usuario.getPassword() == null || usuario.getPassword().isEmpty())) {
-                // Como está en blanco, le volvemos a poner la contraseña que ya tenía antes
-                usuario.setPassword(usuarioExistente.getPassword());
+            if (usuarioExistente != null) {
+                // Si la contraseña viene vacía, mantenemos la encriptada que ya existía
+                if (usuario.getPassword() == null || usuario.getPassword().isEmpty()) {
+                    usuario.setPassword(usuarioExistente.getPassword());
+                } else {
+                    // Si el admin escribió una nueva, la encriptamos
+                    usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+                }
             }
+        } else {
+            // MODO REGISTRO NUEVO
+            usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         }
-
-        // Finalmente guardamos los cambios
         usuarioRepository.save(usuario);
     }
 
@@ -46,15 +63,5 @@ public class UsuarioService {
 
     public Usuario obtenerPorId(Long id) {
         return usuarioRepository.findById(id).orElse(null);
-    }
-
-    @PostConstruct
-    public void usuariosIniciales() {
-        if (usuarioRepository.count() == 0) {
-            // Te agregamos como el Admin principal del sistema
-            usuarioRepository.save(new Usuario("Mau", "mau@playnow.com", "Administrador", "admin123"));
-            usuarioRepository.save(new Usuario("Aylin", "aylin@playnow.com", "Vendedor", "vendedor123"));
-            usuarioRepository.save(new Usuario("Pepe", "pepe@gmail.com", "Cliente", "cliente123"));
-        }
     }
 }

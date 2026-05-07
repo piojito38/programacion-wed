@@ -1,23 +1,35 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Play Now - Inicio</title>
-    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="stylesheet" th:href="@{/css/index.css?v=2}">
 </head>
 <body>
 
 <header class="cabecera-principal">
     <div class="logo">
-        <h1>PLAY NOW</h1>
+        <a th:href="@{/}" style="text-decoration: none; color: inherit;">
+            <h1>PLAY NOW</h1>
+        </a>
     </div>
     <nav class="menu-navegacion">
         <ul>
             <li><a th:href="@{/}" class="activo">Inicio</a></li>
             <li><a th:href="@{/contacto}">Contacto</a></li>
             <li><a th:href="@{/publicidad}">Publicidad</a></li>
-            <li><a th:href="@{/perfil}" class="btn-login">Mi Biblioteca</a></li>
+
+            <li>
+                <a th:href="@{/login}"
+                   sec:authorize="!isAuthenticated()"
+                   class="btn-login">Iniciar Sesión</a>
+
+                <a th:href="@{/perfil}"
+                   sec:authorize="isAuthenticated()"
+                   class="btn-login">Mi Biblioteca</a>
+            </li>
         </ul>
     </nav>
 </header>
@@ -45,26 +57,21 @@
         <h3 th:text="'Juegos de ' + ${cat.nombre}">Nombre de Categoría</h3>
 
         <th:block th:with="juegosEnCategoria=${productos.?[categorias != null and !categorias.?[id == __${cat.id}__].isEmpty()]}">
-
             <div class="cuadricula-juegos" th:if="${not #lists.isEmpty(juegosEnCategoria)}">
                 <article class="tarjeta-juego" th:each="producto : ${juegosEnCategoria}">
                     <img th:src="@{${producto.imagenUrl}}" alt="Portada" class="img-juego">
                     <div class="info-juego">
                         <h4 th:text="${producto.nombre}">Nombre</h4>
                         <p class="estrellas">&#9733;&#9733;&#9733;&#9733;&#9734;</p>
-
                         <span class="precio" th:text="${producto.getPrecioFinal() == 0 ? 'Gratis' : '$' + producto.getPrecioFinal()}">$0.00</span>
-
                         <a th:href="@{/compra}" class="btn-comprar">Obtener</a>
                     </div>
                 </article>
             </div>
 
-            <div th:if="${#lists.isEmpty(juegosEnCategoria)}"
-                 style="color: #666; padding: 10px; font-style: italic;">
+            <div th:if="${#lists.isEmpty(juegosEnCategoria)}" style="color: #666; padding: 10px; font-style: italic;">
                 Próximamente más títulos en esta sección.
             </div>
-
         </th:block>
     </section>
 </main>
