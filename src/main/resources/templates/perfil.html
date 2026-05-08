@@ -1,29 +1,34 @@
 <!DOCTYPE html>
-<!-- 1. Agregado el espacio de nombres de Thymeleaf -->
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PLAY NOW - Mi Perfil</title>
-    <!-- 2. Corregida la ruta del CSS -->
     <link rel="stylesheet" th:href="@{/css/perfil.css}">
 </head>
 <body>
 
 <header class="cabecera-principal">
     <div class="logo">
-        <!-- 3. Enlace al inicio corregido -->
         <a th:href="@{/}" class="logo-enlace">
             <h1>PLAY NOW</h1>
         </a>
     </div>
     <nav class="menu-navegacion">
         <ul>
-            <!-- 4. Todos los enlaces de navegación corregidos -->
             <li><a th:href="@{/}">Inicio</a></li>
             <li><a th:href="@{/contacto}">Contacto</a></li>
+            <li><a th:href="@{/publicidad}">Publicidad</a></li>
             <li><a th:href="@{/perfil}" class="activo">Mi Biblioteca</a></li>
-            <li><a th:href="@{/login}" class="btn-login">Cerrar Sesión</a></li>
+
+            <li>
+                <form th:action="@{/logout}" method="post" style="display: inline;">
+                    <button type="submit" class="btn-login" style="cursor: pointer; border: none; font-family: inherit;">
+                        Cerrar Sesión
+                    </button>
+                </form>
+            </li>
         </ul>
     </nav>
 </header>
@@ -32,19 +37,18 @@
 
     <aside class="panel-usuario">
         <div class="avatar-usuario">
-            <span>P</span>
+            <span th:text="${usuario.nickname != null ? #strings.substring(usuario.nickname,0,1).toUpperCase() : 'U'}">U</span>
         </div>
-        <h2>Pepe</h2>
-        <p class="correo">pepe@email.com</p>
+        <h2 th:text="${usuario.nickname}">Nickname</h2>
+        <p class="correo" th:text="${usuario.correo}">correo@ejemplo.com</p>
 
         <ul class="menu-perfil">
             <li><a href="#" class="opcion-activa">🎮 Mis Juegos</a></li>
-            <li><a href="#">💳 Métodos de Pago</a></li>
+            <li><a href="   #">💳 Métodos de Pago</a></li>
             <li><a href="#">⚙️ Ajustes de Cuenta</a></li>
             <li><a href="#">🧾 Historial de Facturas</a></li>
 
-            <li class="separador-admin">
-                <!-- 5. Enlace al panel de gestión corregido -->
+            <li class="separador-admin" sec:authorize="hasAnyRole('ADMINISTRADOR', 'VENDEDOR')">
                 <a th:href="@{/gestion}" class="btn-admin-acceso">🛠️ Panel de Gestión</a>
             </li>
         </ul>
@@ -53,28 +57,26 @@
     <section class="biblioteca-juegos">
         <div class="cabecera-biblioteca">
             <h3>Mi Colección</h3>
-            <span class="contador-juegos">2 Juegos en propiedad</span>
+            <span class="contador-juegos">Tus títulos adquiridos</span>
         </div>
 
         <div class="cuadricula-biblioteca">
+            <p th:if="${#lists.isEmpty(pedidos)}" style="color: #bbb; grid-column: 1/-1; text-align: center; padding: 2rem;">
+                Aún no tienes juegos en tu biblioteca. ¡Visita nuestra tienda!
+            </p>
 
-            <article class="tarjeta-biblioteca">
-                <!-- 6. Corregidas las rutas de las imágenes -->
-                <img th:src="@{/img/valorant.jpg}" alt="Portada de Valorant" class="img-juego-comprado">
+            <article class="tarjeta-biblioteca" th:each="p : ${pedidos}">
+                <img th:src="@{'/img/' + ${p.producto.imagen}}" th:alt="'Portada de ' + ${p.producto.nombre}" class="img-juego-comprado">
                 <div class="info-comprado">
-                    <h4>Valorant</h4>
-                    <p class="tiempo-jugado">Tiempo jugado: 142 horas</p>
+                    <h4 th:text="${p.producto.nombre}">Nombre del Juego</h4>
+                    <p class="tiempo-jugado">
+                        Comprado el: <span th:text="${#temporals.format(p.fechaVenta, 'dd/MM/yyyy')}">01/01/2024</span>
+                    </p>
+                    <p class="estado-pedido" th:style="${p.estadoRecojo == 'PENDIENTE' ? 'color: #ffcc00' : 'color: #00ff88'}">
+                        Estado: <span th:text="${p.estadoRecojo}">PENDIENTE</span>
+                    </p>
                 </div>
             </article>
-
-            <article class="tarjeta-biblioteca">
-                <img th:src="@{/img/doom.avif}" alt="Portada de Doom" class="img-juego-comprado">
-                <div class="info-comprado">
-                    <h4>Doom Eternal</h4>
-                    <p class="tiempo-jugado">Tiempo jugado: 12 horas</p>
-                </div>
-            </article>
-
         </div>
     </section>
 

@@ -1,46 +1,46 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Play Now - Contacto</title>
-    <link rel="stylesheet" href="/css/contacto.css">
+    <link rel="stylesheet" th:href="@{/css/contacto.css}">
 </head>
 <body>
 
 <header class="cabecera-principal">
     <div class="logo">
-        <a href="/index.html" class="logo-enlace">
+        <a th:href="@{/}" class="logo-enlace">
             <h1>PLAY NOW</h1>
         </a>
     </div>
     <nav class="menu-navegacion">
         <ul>
-            <li><a href="/index.html">Inicio</a></li>
-            <li><a href="/contacto.html" class="activo">Contacto</a></li>
-            <li><a href="/publicidad.html">Publicidad</a></li>
-            <li><a href="/login.html" class="btn-login">Iniciar Sesión</a></li>
+            <li><a th:href="@{/}">Inicio</a></li>
+            <li><a th:href="@{/contacto}" class="activo">Contacto</a></li>
+            <li><a th:href="@{/publicidad}">Publicidad</a></li>
+            <li>
+                <a th:href="@{/login}" sec:authorize="!isAuthenticated()" class="btn-login">Iniciar Sesión</a>
+                <a th:href="@{/perfil}" sec:authorize="isAuthenticated()" class="btn-login">Mi Biblioteca</a>
+            </li>
         </ul>
     </nav>
 </header>
 
 <main class="contenedor-principal">
     <section class="tarjeta-contacto">
-
         <article class="info-soporte">
             <h2>¿Necesitas ayuda?</h2>
             <p class="descripcion">Estamos aquí para resolver tus dudas sobre juegos, compras o problemas técnicos.</p>
-
             <div class="bloque-info">
                 <h4>📍 Ubicación Central</h4>
                 <p>Huancayo, Junín, Perú</p>
             </div>
-
             <div class="bloque-info">
                 <h4>✉️ Correo Electrónico</h4>
                 <p>soporte@playnow.com</p>
             </div>
-
             <div class="bloque-info">
                 <h4>🕒 Horario de Atención</h4>
                 <p>Lunes a Viernes: 9:00 AM - 8:00 PM</p>
@@ -48,12 +48,15 @@
         </article>
 
         <article class="formulario-contacto">
-            <form action="#" method="get">
+            <div th:if="${param.exito}" style="color: #2ecc71; margin-bottom: 20px; font-weight: bold;">
+                ¡Mensaje enviado con éxito! Nos contactaremos pronto.
+            </div>
 
+            <form th:action="@{/contacto/enviar}" method="post">
                 <div class="fila-inputs">
                     <div class="grupo-input">
-                        <label for="nombre">Nombre de Usuario</label>
-                        <input type="text" id="nombre" name="nombre" placeholder="Tu nombre o Nickname" required>
+                        <label for="nickname">Nombre de Usuario</label>
+                        <input type="text" id="nickname" name="nickname" placeholder="Tu nombre o Nickname" required>
                     </div>
                     <div class="grupo-input">
                         <label for="correo">Correo Electrónico</label>
@@ -64,23 +67,22 @@
                 <div class="grupo-input">
                     <label for="asunto">Asunto</label>
                     <select id="asunto" name="asunto" required>
-                        <option value="">Selecciona el motivo de tu consulta...</option>
-                        <option value="compra">Problema con una compra</option>
-                        <option value="tecnico">Soporte técnico de un juego</option>
-                        <option value="cuenta">Problemas con mi cuenta</option>
-                        <option value="otro">Otro motivo</option>
+                        <option value="">Selecciona el motivo...</option>
+                        <option value="Problema con compra">Problema con una compra</option>
+                        <option value="Soporte técnico">Soporte técnico de un juego</option>
+                        <option value="Problema de cuenta">Problemas con mi cuenta</option>
+                        <option value="Otro">Otro motivo</option>
                     </select>
                 </div>
 
                 <div class="grupo-input">
                     <label for="mensaje">Mensaje</label>
-                    <textarea id="mensaje" name="mensaje" rows="5" placeholder="Describe tu problema con el mayor detalle posible..." required></textarea>
+                    <textarea id="mensaje" name="mensaje" rows="5" placeholder="Describe tu problema..." required></textarea>
                 </div>
 
                 <button type="submit" class="btn-enviar">ENVIAR MENSAJE</button>
             </form>
         </article>
-
     </section>
 </main>
 

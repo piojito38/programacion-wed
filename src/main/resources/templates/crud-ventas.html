@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>PLAY NOW - Módulo de Ventas</title>
+    <link rel="stylesheet" th:href="@{/css/crud-ventas.css}">
+</head>
+<body>
+
+<header class="cabecera-admin">
+    <div class="logo">
+        <h1>PLAY NOW <span>| VENTAS</span></h1>
+    </div>
+    <nav class="menu-admin">
+        <ul>
+            <li><a th:href="@{/gestion}">Panel Principal</a></li>
+            <li><a th:href="@{/vendedor/ventas}" class="activo">Ventas</a></li>
+            <li><a th:href="@{/login}" class="btn-salir">Cerrar Sesión</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="contenedor-ventas">
+
+    <div th:if="${param.exito}" class="alerta-exito">
+        ✅ Transacción completada con éxito. El stock ha sido actualizado.
+    </div>
+
+    <section class="seccion-busqueda">
+        <h2>🔍 Gestión de Clientes</h2>
+        <form th:action="@{/vendedor/ventas}" method="get" class="form-busqueda">
+            <input type="text" name="buscar" th:value="${param.buscar}" placeholder="Buscar por nickname del cliente...">
+            <button type="submit">Buscar</button>
+        </form>
+    </section>
+
+    <div class="layout-ventas">
+
+        <section class="panel-resultados">
+            <h3>Resultados de Búsqueda</h3>
+            <table class="tabla-ventas">
+                <thead>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Correo</th>
+                    <th>Acción Rápida</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="c : ${clientes}">
+                    <td th:text="${c.nickname}"></td>
+                    <td th:text="${c.correo}"></td>
+                    <td>
+                        <form th:action="@{/vendedor/agregar-venta}" method="post">
+                            <input type="hidden" name="clienteId" th:value="${c.id}">
+                            <select name="productoId" required style="padding: 5px; background: #0b0b0e; color: white; border: 1px solid #444; border-radius: 4px;">
+                                <option th:each="p : ${productos}" th:value="${p.id}" th:text="${p.nombre}"></option>
+                            </select>
+                            <button type="submit" class="btn-accion-venta">Vender</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <aside class="panel-registro-nuevo">
+            <h3>Nuevo Cliente</h3>
+            <form th:action="@{/vendedor/registrar-cliente-venta}" method="post">
+                <div class="campo-venta">
+                    <label>Nickname</label>
+                    <input type="text" name="nickname" required>
+                </div>
+                <div class="campo-venta">
+                    <label>Correo Electrónico</label>
+                    <input type="email" name="correo" required>
+                </div>
+                <div class="campo-venta">
+                    <label>Producto a Vender</label>
+                    <select name="productoId" required>
+                        <option th:each="p : ${productos}" th:value="${p.id}" th:text="${p.nombre}"></option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-completar-venta">Registrar y Vender</button>
+            </form>
+        </aside>
+
+    </div>
+</main>
+</body>
+</html>
