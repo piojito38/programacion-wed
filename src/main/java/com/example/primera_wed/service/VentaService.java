@@ -16,40 +16,66 @@ public class VentaService {
     @Autowired private PedidoRepository pedidoRepository;
     @Autowired private PasswordEncoder passwordEncoder;
 
-    // Buscar clientes (rol Cliente) por nickname
-    public List<Usuario> buscarClientes(String nickname) {
-        return usuarioRepository.findByNicknameContainingIgnoreCaseAndRol(nickname, "Cliente");
+    /**
+     * Busca clientes activos con el rol 'Cliente'.
+     * Ahora utiliza el método avanzado que busca por Nickname, Nombres o Apellidos.
+     */
+    public List<Usuario> buscarClientes(String criterio) {
+        return usuarioRepository.buscarClientesPorCriterio(criterio, "Cliente");
     }
 
-    // Registrar un nuevo cliente y asignarle su primera venta
+    /**
+     * Recupera todas las compras realizadas por un cliente específico.
+     */
+    public List<Pedido> obtenerHistorialCliente(Long clienteId) {
+        Usuario cliente = usuarioRepository.findById(clienteId)
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+        return pedidoRepository.findByCliente(cliente);
+    }
+
+    /**
+     * Registra un cliente nuevo con sus datos en MAYÚSCULAS y
+     * procesa su primera compra de forma inmediata.
+     */
     @Transactional
     public void registrarClienteYVenta(Usuario nuevoCliente, Long productoId) {
+        // La lógica de conversión a MAYÚSCULAS se ejecuta automáticamente
+        // gracias a los setters que definimos en la entidad Usuario.
         nuevoCliente.setRol("Cliente");
         nuevoCliente.setActivo(true);
-        nuevoCliente.setPassword(passwordEncoder.encode("123456")); // Clave temporal
+
+        // Asignamos una contraseña genérica inicial
+        nuevoCliente.setPassword(passwordEncoder.encode("123456"));
+
         usuarioRepository.save(nuevoCliente);
+
+        // Procedemos a registrar la venta vinculada
         realizarVenta(nuevoCliente.getId(), productoId);
     }
 
-    // Realizar venta a un cliente existente
+    /**
+     * Registra una venta para un cliente existente y descuenta el stock.
+     */
     @Transactional
     public void realizarVenta(Long clienteId, Long productoId) {
         Usuario cliente = usuarioRepository.findById(clienteId)
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+
         Producto producto = productoRepository.findById(productoId)
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
-        if (producto.getStock() <= 0) {
-            throw new RuntimeException("Sin stock suficiente");
+        // Validación crítica de inventario
+        if (producto.getStock() == null || producto.getStock() <= 0) {
+            throw new RuntimeException("Sin stock suficiente para " + producto.getNombre());
         }
 
-        // Crear el pedido
+        // 1. Crear y guardar el registro del Pedido
         Pedido pedido = new Pedido();
         pedido.setCliente(cliente);
         pedido.setProducto(producto);
         pedidoRepository.save(pedido);
 
-        // Descontar stock automáticamente
+        // 2. Descontar stock físicamente en la base de datos
         producto.setStock(producto.getStock() - 1);
         productoRepository.save(producto);
     }

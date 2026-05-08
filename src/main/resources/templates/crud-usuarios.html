@@ -41,6 +41,16 @@
           <input type="hidden" th:field="*{activo}">
 
           <div class="campo">
+            <label>Nombres</label>
+            <input type="text" th:field="*{nombres}" placeholder="EJ: JUAN PEDRO" required>
+          </div>
+
+          <div class="campo">
+            <label>Apellidos</label>
+            <input type="text" th:field="*{apellidos}" placeholder="EJ: CASTILLO" required>
+          </div>
+
+          <div class="campo">
             <label>Nombre de Usuario / Nickname</label>
             <input type="text" th:field="*{nickname}" placeholder="Ej. edu123" required>
           </div>
@@ -84,7 +94,7 @@
           <thead>
           <tr>
             <th>Avatar</th>
-            <th>Nickname</th>
+            <th>Nombre Completo</th> <th>Nickname</th>
             <th>Correo</th>
             <th>Rol</th>
             <th>Estado</th>
@@ -97,7 +107,8 @@
               <div class="mini-avatar" th:classappend="${u.rol == 'Administrador' ? '' : (u.rol == 'Vendedor' ? 'green' : 'gray')}"
                    th:text="${#strings.substring(u.nickname,0,1).toUpperCase()}">A</div>
             </td>
-            <td><strong th:text="${u.nickname}">Aylin</strong></td>
+            <td><strong th:text="${u.nombres + ' ' + u.apellidos}">NOMBRE APELLIDO</strong></td>
+            <td th:text="${u.nickname}">Aylin</td>
             <td th:text="${u.correo}">aylin@email.com</td>
             <td>
                 <span class="tag"
@@ -116,7 +127,7 @@
             </td>
           </tr>
           <tr th:if="${#lists.isEmpty(usuarios)}">
-            <td colspan="6" style="text-align: center; padding: 20px; color: #999;">
+            <td colspan="7" style="text-align: center; padding: 20px; color: #999;">
               No hay usuarios registrados en el sistema.
             </td>
           </tr>

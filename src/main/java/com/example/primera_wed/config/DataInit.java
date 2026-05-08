@@ -19,7 +19,7 @@ public class DataInit implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         // Usaremos el nickname "MauAdmin" que es el que vimos que el repo sí reconoce en azul
-        String nicknameAdmin = "MauAdmin";
+        String nicknameAdmin = "Admin";
         String passEncriptada = passwordEncoder.encode("admin123");
 
         usuarioRepository.findByNickname(nicknameAdmin).ifPresentOrElse(
@@ -27,18 +27,18 @@ public class DataInit implements CommandLineRunner {
                     // Si ya existe MauAdmin, nos aseguramos que su clave sea la encriptada
                     usuario.setPassword(passEncriptada);
                     usuarioRepository.save(usuario);
-                    System.out.println("⚡ Usuario MauAdmin verificado y actualizado.");
+                    System.out.println("⚡ Usuario admin verificado y actualizado.");
                 },
                 () -> {
                     // Si no existe, lo creamos
                     Usuario admin = new Usuario();
                     admin.setNickname(nicknameAdmin);
-                    admin.setCorreo("mau@playnow.com");
+                    admin.setCorreo("admin@playnow.com");
                     admin.setRol("ADMINISTRADOR");
                     admin.setPassword(passEncriptada);
                     admin.setActivo(true);
                     usuarioRepository.save(admin);
-                    System.out.println("✅ Usuario MauAdmin creado con éxito.");
+                    System.out.println("✅ Usuario admin creado con éxito.");
                 }
         );
     }
