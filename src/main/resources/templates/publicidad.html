@@ -1,54 +1,58 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PLAY NOW - Oferta Especial</title>
-    <link rel="stylesheet" href="/css/publicidad.css">
+    <link rel="stylesheet" th:href="@{/css/publicidad.css}">
 </head>
 <body>
 
 <header class="cabecera-simple">
-    <a href="/index.html" class="btn-volver">&#8592; Volver a la tienda</a>
+    <a th:href="@{/}" class="btn-volver">&#8592; Volver a la tienda</a>
     <h1>OFERTA DESTACADA</h1>
+    <div sec:authorize="isAuthenticated()">
+        <a th:href="@{/perfil}" class="btn-volver" style="color: #0074e4; font-weight: bold;">Mi Biblioteca &#8594;</a>
+    </div>
 </header>
 
 <main class="promo-container">
-    <section class="hero-publicidad">
+    <section class="hero-publicidad" th:style="'background-image: url(' + ${oferta.imagenUrl} + ');'">
         <div class="capa-oscura">
             <div class="contenido-promo">
-                <span class="etiqueta-nuevo">¡NUEVO LANZAMIENTO!</span>
-                <h2>ZEPHON</h2>
-                <p class="subtitulo">ZEPHON es un paisaje infernal postapocalíptico repleto de inteligencias mecánicas, bestias mutantes y horrores del vacío. Desde el primer turno que juegues hasta el último, estarás luchando por la supervivencia.</p>
+                <span class="etiqueta-nuevo" th:text="${oferta.etiqueta}">¡NUEVO LANZAMIENTO!</span>
+                <h2 th:text="${oferta.titulo}">TÍTULO DEL JUEGO</h2>
+                <p class="subtitulo" th:text="${oferta.subtitulo}">Descripción del juego...</p>
 
                 <div class="oferta-box">
-                    <span class="descuento">-40% DE DESCUENTO</span>
+                    <span class="descuento" th:text="${oferta.descuento}">-0% DE DESCUENTO</span>
                     <div class="precios">
-                        <span class="precio-viejo">$59.99</span>
-                        <span class="precio-nuevo">$35.99</span>
+                        <span class="precio-viejo" th:text="'$' + ${oferta.precioOriginal}">$0.00</span>
+                        <span class="precio-nuevo" th:text="'$' + ${oferta.precioOferta}">$0.00</span>
                     </div>
                 </div>
 
                 <div class="acciones">
-                    <a href="/compra.html" class="btn-comprar-promo">COMPRAR AHORA</a>
-                    <p class="tiempo-limite">⏱️ La oferta termina en: 24h 15m</p>
+                    <a th:href="@{/compra}" class="btn-comprar-promo">COMPRAR AHORA</a>
+                    <p class="tiempo-limite" th:text="'⏱️ La oferta termina en: ' + ${oferta.tiempoLimite}">⏱️ La oferta termina en: --</p>
                 </div>
             </div>
         </div>
     </section>
 
     <section class="detalles-rapidos">
-        <div class="item-detalle">
-            <h4>Multijugador</h4>
-            <p>Hasta 64 jugadores en tiempo real.</p>
+        <div class="item-detalle" th:if="${oferta.detalle1Titulo != null and !oferta.detalle1Titulo.isEmpty()}">
+            <h4 th:text="${oferta.detalle1Titulo}">Multijugador</h4>
+            <p th:text="${oferta.detalle1Texto}">Hasta 64 jugadores...</p>
         </div>
-        <div class="item-detalle">
-            <h4>Ray Tracing</h4>
-            <p>Iluminación de última generación.</p>
+        <div class="item-detalle" th:if="${oferta.detalle2Titulo != null and !oferta.detalle2Titulo.isEmpty()}">
+            <h4 th:text="${oferta.detalle2Titulo}">Ray Tracing</h4>
+            <p th:text="${oferta.detalle2Texto}">Iluminación...</p>
         </div>
-        <div class="item-detalle">
-            <h4>Premios</h4>
-            <p>Nominado a juego del año.</p>
+        <div class="item-detalle" th:if="${oferta.detalle3Titulo != null and !oferta.detalle3Titulo.isEmpty()}">
+            <h4 th:text="${oferta.detalle3Titulo}">Premios</h4>
+            <p th:text="${oferta.detalle3Texto}">Nominado a...</p>
         </div>
     </section>
 </main>

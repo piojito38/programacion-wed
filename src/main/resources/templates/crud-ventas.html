@@ -25,11 +25,14 @@
     <div th:if="${param.exito}" class="alerta-exito">
         ✅ Transacción completada con éxito. El stock ha sido actualizado.
     </div>
+    <div th:if="${param.error}" style="background: rgba(231, 76, 60, 0.1); color: #e74c3c; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #e74c3c;">
+        ❌ Ocurrió un error (Posible falta de stock).
+    </div>
 
     <section class="seccion-busqueda">
         <h2>🔍 Gestión de Clientes</h2>
         <form th:action="@{/vendedor/ventas}" method="get" class="form-busqueda">
-            <input type="text" name="buscar" th:value="${param.buscar}" placeholder="Buscar por nickname del cliente...">
+            <input type="text" name="buscar" th:value="${param.buscar}" placeholder="Buscar por Nombre, Apellido o Nickname..." required>
             <button type="submit">Buscar</button>
         </form>
     </section>
@@ -38,24 +41,42 @@
 
         <section class="panel-resultados">
             <h3>Resultados de Búsqueda</h3>
-            <table class="tabla-ventas">
+            <table class="tabla-ventas" th:if="${clientes}">
                 <thead>
                 <tr>
                     <th>Cliente</th>
-                    <th>Correo</th>
-                    <th>Acción Rápida</th>
+                    <th>Juegos en Propiedad</th>
+                    <th>Nueva Venta</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="c : ${clientes}">
-                    <td th:text="${c.nickname}"></td>
-                    <td th:text="${c.correo}"></td>
                     <td>
-                        <form th:action="@{/vendedor/agregar-venta}" method="post">
+                        <strong th:text="${c.nombres + ' ' + c.apellidos}"></strong><br>
+                        <span style="color:#888; font-size:12px;" th:text="${'@' + c.nickname}"></span>
+                    </td>
+
+                    <td th:with="pedidos=${historialClientes.get(c.id)}">
+                        <div th:if="${#lists.isEmpty(pedidos)}" style="color: #bbb; font-style: italic; font-size: 13px;">
+                            esperamos su colaboración TwT
+                        </div>
+                        <div th:if="${not #lists.isEmpty(pedidos)}">
+                            <span th:each="p : ${pedidos}" class="tag-juego" th:text="${p.producto.nombre}"></span>
+                        </div>
+                    </td>
+
+                    <td>
+                        <form th:action="@{/vendedor/agregar-venta}" method="post" style="display: flex; flex-direction: column; gap: 5px;">
                             <input type="hidden" name="clienteId" th:value="${c.id}">
-                            <select name="productoId" required style="padding: 5px; background: #0b0b0e; color: white; border: 1px solid #444; border-radius: 4px;">
+
+                            <input type="text" class="input-filtro" placeholder="🔍 Filtrar juego..."
+                                   th:onkeyup="|filtrarSelect(this, 'select-prod-${c.id}')|">
+
+                            <select th:id="'select-prod-' + ${c.id}" name="productoId" required class="select-juego">
+                                <option value="">-- Seleccionar --</option>
                                 <option th:each="p : ${productos}" th:value="${p.id}" th:text="${p.nombre}"></option>
                             </select>
+
                             <button type="submit" class="btn-accion-venta">Vender</button>
                         </form>
                     </td>
@@ -68,6 +89,14 @@
             <h3>Nuevo Cliente</h3>
             <form th:action="@{/vendedor/registrar-cliente-venta}" method="post">
                 <div class="campo-venta">
+                    <label>Nombres</label>
+                    <input type="text" name="nombres" placeholder="EJ: JUAN" required>
+                </div>
+                <div class="campo-venta">
+                    <label>Apellidos</label>
+                    <input type="text" name="apellidos" placeholder="EJ: PEREZ" required>
+                </div>
+                <div class="campo-venta">
                     <label>Nickname</label>
                     <input type="text" name="nickname" required>
                 </div>
@@ -75,17 +104,39 @@
                     <label>Correo Electrónico</label>
                     <input type="email" name="correo" required>
                 </div>
+
                 <div class="campo-venta">
-                    <label>Producto a Vender</label>
-                    <select name="productoId" required>
+                    <label>Primera Compra</label>
+                    <input type="text" class="input-filtro" placeholder="🔍 Filtrar..." onkeyup="filtrarSelect(this, 'select-nuevo')" style="margin-bottom: 5px;">
+                    <select id="select-nuevo" name="productoId" required class="select-juego">
+                        <option value="">-- Seleccione un juego --</option>
                         <option th:each="p : ${productos}" th:value="${p.id}" th:text="${p.nombre}"></option>
                     </select>
                 </div>
+
                 <button type="submit" class="btn-completar-venta">Registrar y Vender</button>
             </form>
         </aside>
 
     </div>
 </main>
+
+<script>
+    function filtrarSelect(input, selectId) {
+        let filtro = input.value.toLowerCase();
+        let select = document.getElementById(selectId);
+        let options = select.getElementsByTagName('option');
+
+        for (let i = 1; i < options.length; i++) { // Salta el option 0 que es "-- Seleccionar --"
+            let texto = options[i].textContent || options[i].innerText;
+            if (texto.toLowerCase().indexOf(filtro) > -1) {
+                options[i].style.display = "";
+            } else {
+                options[i].style.display = "none";
+            }
+        }
+    }
+</script>
+
 </body>
 </html>

@@ -1,18 +1,19 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PLAY NOW - Detalle de Compra</title>
-    <link rel="stylesheet" href="/css/compra.css">
+    <title th:text="'PLAY NOW - Comprar ' + ${producto.nombre}">PLAY NOW - Detalle de Compra</title>
+    <link rel="stylesheet" th:href="@{/css/compra.css}">
 </head>
 <body>
 
 <header class="cabecera-compra">
-    <a href="/index.html" class="btn-volver">&#8592; Volver a la tienda</a>
+    <a th:href="@{/}" class="btn-volver">&#8592; Volver a la tienda</a>
 
     <div class="logo">
-        <a href="/index.html" class="logo-enlace">
+        <a th:href="@{/}" class="logo-enlace">
             <h1>PLAY NOW</h1>
         </a>
     </div>
@@ -22,29 +23,23 @@
 
 <main class="contenedor-principal">
 
+    <div th:if="${param.error}" style="background: rgba(231, 76, 60, 0.1); color: #e74c3c; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #e74c3c; text-align: center;">
+        ❌ No se pudo procesar la compra. Verifica el stock disponible.
+    </div>
+
     <div class="layout-compra">
 
         <section class="detalle-juego">
-            <img src="/img/valorant.jpg" alt="Portada de Valorant" class="img-portada">
+            <img th:src="@{'/img/' + ${producto.imagen}}" th:alt="'Portada de ' + ${producto.nombre}" class="img-portada" onerror="this.src='/img/placeholder.png'">
 
             <div class="info-texto">
-                <h2>Valorant</h2>
-                <span class="etiqueta-genero">Acción / Shooter</span>
+                <h2 th:text="${producto.nombre}">Nombre del Juego</h2>
+                <span class="etiqueta-genero" th:text="${producto.categoria != null ? producto.categoria.nombre : 'General'}">Género</span>
 
                 <h3>Descripción del Juego</h3>
-                <p class="descripcion">
-                    Un shooter táctico 5v5 basado en personajes donde la precisión y el uso de habilidades únicas son la clave para la victoria. Elige a tu agente, domina tus armas y coordínate con tu equipo para defender o atacar en mapas dinámicos. ¿Tienes lo necesario para ser el mejor?
+                <p class="descripcion" th:text="${producto.descripcion}">
+                    Descripción de la base de datos...
                 </p>
-
-                <div class="requisitos">
-                    <h4>Requisitos Mínimos:</h4>
-                    <ul>
-                        <li><strong>SO:</strong> Windows 10 (64-bit)</li>
-                        <li><strong>Procesador:</strong> Intel Core i3-4150 / AMD A8-7650K</li>
-                        <li><strong>Memoria:</strong> 4 GB RAM</li>
-                        <li><strong>Gráficos:</strong> NVIDIA GeForce GT 730 / AMD Radeon R5 240</li>
-                    </ul>
-                </div>
             </div>
         </section>
 
@@ -54,7 +49,7 @@
             <div class="desglose-precio">
                 <div class="fila-precio">
                     <span>Precio base</span>
-                    <span>Gratis</span>
+                    <span th:text="${producto.precio > 0 ? '$' + producto.precio : 'Gratis'}">Gratis</span>
                 </div>
                 <div class="fila-precio">
                     <span>Impuestos</span>
@@ -62,7 +57,7 @@
                 </div>
                 <div class="fila-precio total">
                     <span>Total a pagar</span>
-                    <span>$0.00</span>
+                    <span th:text="${producto.precio > 0 ? '$' + producto.precio : 'Gratis'}">$0.00</span>
                 </div>
             </div>
 
@@ -71,12 +66,29 @@
                 <div class="iconos-pago">
                     <span class="icono">💳 Tarjeta</span>
                     <span class="icono">🅿️ PayPal</span>
-                    <span class="icono">🏪pago en tienda</span>
+                    <span class="icono">🏪 Pago en tienda</span>
                 </div>
+
+                <p style="margin-top: 15px; font-size: 0.9em; color: #aaa;">
+                    Stock disponible: <strong th:text="${producto.stock}" th:style="${producto.stock > 0 ? 'color: #2ecc71;' : 'color: #e74c3c;'}">0</strong> unidades
+                </p>
             </div>
 
-            <form action="/index.html" method="get">
-                <button type="submit" class="btn-confirmar">REALIZAR PEDIDO</button>
+            <form th:action="@{/realizar-compra}" method="post">
+                <input type="hidden" name="productoId" th:value="${producto.id}">
+
+                <div sec:authorize="!isAuthenticated()">
+                    <a th:href="@{/login}" class="btn-confirmar" style="display: block; text-align: center; text-decoration: none; line-height: normal; padding-top: 15px;">INICIA SESIÓN PARA COMPRAR</a>
+                </div>
+
+                <div sec:authorize="isAuthenticated()">
+                    <button type="submit" class="btn-confirmar"
+                            th:disabled="${producto.stock <= 0}"
+                            th:style="${producto.stock <= 0 ? 'background: #555; cursor: not-allowed;' : ''}"
+                            th:text="${producto.stock > 0 ? 'REALIZAR PEDIDO' : 'AGOTADO'}">
+                        REALIZAR PEDIDO
+                    </button>
+                </div>
             </form>
 
             <p class="terminos">Al hacer clic en "Realizar Pedido", aceptas nuestros términos de servicio y políticas de reembolso.</p>

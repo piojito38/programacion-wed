@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLAY NOW - Ofertas Destacadas</title>
+    <link rel="stylesheet" th:href="@{/css/crud-oferta.css}">
+</head>
+<body>
+
+<header class="cabecera-admin">
+    <div class="logo">
+        <h1>PLAY NOW <span>| PUBLICIDAD</span></h1>
+    </div>
+    <nav class="menu-admin">
+        <ul>
+            <li><a th:href="@{/gestion}">Panel Principal</a></li>
+            <li><a th:href="@{/admin/ofertas}" class="activo">Ofertas Destacadas</a></li>
+            <li><a th:href="@{/login}" class="btn-salir">Cerrar Sesión</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="contenedor-ofertas">
+
+    <div class="cabecera-seccion">
+        <h2>📢 Gestión de Promociones</h2>
+        <p>Configura la oferta principal que verán los usuarios en la página de publicidad.</p>
+    </div>
+
+    <div class="layout-ofertas">
+
+        <section class="panel-tabla">
+            <table class="tabla-ofertas">
+                <thead>
+                <tr>
+                    <th>Imagen</th>
+                    <th>Juego</th>
+                    <th>Descuento</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="o : ${ofertas}">
+                    <td>
+                        <img th:src="${o.imagenUrl}" alt="Fondo" class="img-miniatura" onerror="this.src='/img/placeholder.png'">
+                    </td>
+                    <td>
+                        <strong th:text="${o.titulo}">Título</strong><br>
+                        <span style="font-size: 11px; color: #888;" th:text="${o.etiqueta}">Etiqueta</span>
+                    </td>
+                    <td>
+                        <strong style="color: #0074e4;" th:text="${o.descuento}">-0%</strong>
+                    </td>
+                    <td>
+                        <span th:if="${o.activa}" class="tag-activa">● PUBLICADA</span>
+                        <span th:unless="${o.activa}" class="tag-inactiva">OCULTA</span>
+                    </td>
+                    <td>
+                        <a th:href="@{/admin/ofertas/eliminar/{id}(id=${o.id})}"
+                           class="btn-icono rojo"
+                           onclick="return confirm('¿Seguro que deseas borrar esta oferta?')">🗑️</a>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(ofertas)}">
+                    <td colspan="5" style="text-align: center; color: #888;">No hay ofertas registradas. Crea una nueva.</td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <aside class="panel-formulario">
+            <h3>Nueva Oferta</h3>
+            <form th:action="@{/admin/ofertas/guardar}" th:object="${nuevaOferta}" method="post">
+
+                <div class="fila-doble">
+                    <div class="campo">
+                        <label>Título del Juego</label>
+                        <input type="text" th:field="*{titulo}" placeholder="Ej: ZEPHON" required>
+                    </div>
+                    <div class="campo">
+                        <label>Etiqueta Superior</label>
+                        <input type="text" th:field="*{etiqueta}" placeholder="Ej: ¡NUEVO LANZAMIENTO!">
+                    </div>
+                </div>
+
+                <div class="campo">
+                    <label>Descripción / Subtítulo</label>
+                    <textarea th:field="*{subtitulo}" placeholder="Descripción épica del juego..." required></textarea>
+                </div>
+
+                <div class="fila-doble">
+                    <div class="campo">
+                        <label>Precio Antiguo ($)</label>
+                        <input type="number" step="0.01" th:field="*{precioOriginal}" placeholder="59.99">
+                    </div>
+                    <div class="campo">
+                        <label>Precio Oferta ($)</label>
+                        <input type="number" step="0.01" th:field="*{precioOferta}" placeholder="35.99">
+                    </div>
+                    <div class="campo">
+                        <label>% Descuento</label>
+                        <input type="text" th:field="*{descuento}" placeholder="Ej: -40%">
+                    </div>
+                </div>
+
+                <div class="campo">
+                    <label>URL de Imagen de Fondo</label>
+                    <input type="text" th:field="*{imagenUrl}" placeholder="/img/fondo-promo.jpg" required>
+                </div>
+
+                <div class="campo">
+                    <label>Tiempo Límite (Texto)</label>
+                    <input type="text" th:field="*{tiempoLimite}" placeholder="Ej: 24h 15m">
+                </div>
+
+                <div style="border-top: 1px solid #333; margin: 15px 0; padding-top: 15px;">
+                    <label style="font-size: 11px; color:#aaa; margin-bottom: 10px; display:block;">Cajas de Detalles (Abajo)</label>
+                    <div class="fila-doble">
+                        <div class="campo"><input type="text" th:field="*{detalle1Titulo}" placeholder="Título 1"></div>
+                        <div class="campo"><input type="text" th:field="*{detalle1Texto}" placeholder="Texto 1"></div>
+                    </div>
+                    <div class="fila-doble">
+                        <div class="campo"><input type="text" th:field="*{detalle2Titulo}" placeholder="Título 2"></div>
+                        <div class="campo"><input type="text" th:field="*{detalle2Texto}" placeholder="Texto 2"></div>
+                    </div>
+                </div>
+
+                <div class="campo-checkbox">
+                    <input type="checkbox" th:field="*{activa}" id="checkActiva">
+                    <label for="checkActiva">Publicar y activar esta oferta inmediatamente</label>
+                </div>
+
+                <button type="submit" class="btn-registrar">Guardar Promoción</button>
+            </form>
+        </aside>
+
+    </div>
+</main>
+</body>
+</html>
